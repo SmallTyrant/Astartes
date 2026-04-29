@@ -2,7 +2,7 @@
 name: tc-gen-security
 description: 인증·세션·저장소·네트워크·입력검증·권한 등 범용 보안 TC 생성 전담. OWASP ASVS/MASVS 기반. 보안 시나리오에 자동 위임.
 tools: Read, Glob, Grep
-model: opus
+model: sonnet
 color: red
 ---
 
