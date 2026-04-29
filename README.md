@@ -28,6 +28,59 @@ PRD/API 스펙                          outputs/intermediate/coverage-gaps.json
 
 플러그인은 프로젝트-로컬(`.claude/`)로 묶여 있어 이 저장소를 clone 한 디렉토리에서 Claude Code 를 열면 자동으로 인식된다. marketplace 업로드는 별도 단계.
 
+## 설치 (Claude Code marketplace)
+
+이 저장소는 자체 marketplace를 호스팅한다 (`.claude-plugin/marketplace.json`). 다른 프로젝트에서 이 plugin을 쓰려면 marketplace를 등록하고 plugin을 install 한다.
+
+### 1. marketplace 등록
+
+```
+/plugin marketplace add SmallTyrant/Astartes
+```
+
+GitHub 저장소를 marketplace 소스로 자동 인식. 사설 저장소면 git URL 사용:
+
+```
+/plugin marketplace add https://github.com/SmallTyrant/Astartes.git
+```
+
+### 2. plugin install
+
+```
+/plugin install astartes-tc@astartes
+```
+
+형식: `<plugin-name>@<marketplace-name>`. marketplace 이름은 `astartes` (marketplace.json 의 `name`).
+
+### 3. 사용
+
+```
+/astartes-tc:astartes-tc
+```
+
+또는 TC JSON 이 `outputs/testcases/*.json` 에 있으면 description 매칭으로 자동 invoke. CLI 직접 호출도 가능:
+
+```
+python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>
+```
+
+### 4. 업데이트
+
+```
+/plugin marketplace update astartes
+/plugin update astartes-tc@astartes
+```
+
+### 5. 의존성 (필수)
+
+```
+pip install openpyxl
+```
+
+선택: 전체 파이프라인 (`/gen-tc`)을 쓰려면 추가 의존성 필요 → 아래 [빠른 시작 §1](#1-의존성-부트스트랩) 참조.
+
+---
+
 ## 빠른 시작 (3분)
 
 ### 1. 의존성 부트스트랩
