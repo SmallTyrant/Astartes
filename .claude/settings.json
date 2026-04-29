@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Edit(outputs/**)",
+      "Write(outputs/**)",
+      "Edit(outputs/web/**)",
+      "Write(outputs/web/**)",
+      "Write(inputs/figma/raw/**)",
+      "Write(inputs/notion/raw/**)",
+      "Write(inputs/slack/raw/**)",
+      "Write(inputs/pdf/raw/**)",
+      "Write(inputs/slack/export/**)",
+      "Edit(inputs/slack/export/**)",
+      "Write(inputs/notion/export/**)",
+      "Edit(inputs/notion/export/**)",
+      "Edit(CLAUDE.md)",
+      "Write(CLAUDE.md)",
+      "Edit(.claude/agents/**)",
+      "Write(.claude/agents/**)",
+      "Edit(.claude/hooks/**)",
+      "Write(.claude/hooks/**)",
+      "Edit(scripts/**)",
+      "Write(scripts/**)",
+      "Edit(commands/**)",
+      "Write(commands/**)",
+      "Edit(.claude/commands/**)",
+      "Write(.claude/commands/**)",
+      "Edit(tests/**)",
+      "Write(tests/**)",
+      "Bash(git diff:*)",
+      "Bash(git status:*)",
+      "Bash(ls:*)",
+      "Bash(swiftc:*)",
+      "Bash(ktlint:*)",
+      "Bash(python3:*)",
+      "Bash(npx:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(npm install:*)",
+      "Bash(pip:*)",
+      "Bash(pip install:*)",
+      "Bash(bash scripts/bootstrap.sh:*)",
+      "Bash(scripts/bootstrap.sh:*)",
+      "Bash(./scripts/bootstrap.sh:*)",
+      "Bash(chmod +x:*)",
+      "Bash(mkdir -p:*)",
+      "Bash(python3 scripts/fetch_figma.py:*)",
+      "Bash(python3 scripts/fetch_notion.py:*)",
+      "Bash(python3 scripts/fetch_slack.py:*)",
+      "Bash(python3 scripts/parse_pdf.py:*)",
+      "Bash(python3 .claude/skills/tc-sheet/scripts/export_workbook.py:*)",
+      "Bash(rm outputs/sheets/:*)",
+      "Write(outputs/sheets/**)",
+      "Edit(outputs/sheets/**)"
+    ],
+    "deny": [
+      "Read(.env*)",
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)",
+      "Write(inputs/prd/**)",
+      "Edit(inputs/prd/**)",
+      "Write(inputs/api-spec/**)",
+      "Edit(inputs/api-spec/**)",
+      "Write(inputs/figma/export/**)",
+      "Edit(inputs/figma/export/**)"
+    ],
+    "ask": ["WebFetch", "Bash(curl:*)"],
+    "defaultMode": "acceptEdits"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bash scripts/bootstrap.sh --quiet" }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/mask_pii.sh" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write(outputs/testcases/**.json)|Edit(outputs/testcases/**.json)",
+        "hooks": [
+          { "type": "command", "command": "python3 .claude/hooks/validate_tc_schema.py" }
+        ]
+      },
+      {
+        "matcher": "Write(outputs/ios/**.swift)|Edit(outputs/ios/**.swift)",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/check_swift.sh" }
+        ]
+      },
+      {
+        "matcher": "Write(outputs/android/**.kt)|Edit(outputs/android/**.kt)",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/check_kotlin.sh" }
+        ]
+      },
+      {
+        "matcher": "Write(outputs/web/**.ts)|Edit(outputs/web/**.ts)",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/check_typescript.sh" }
+        ]
+      }
+    ]
+  },
+  "includeCoAuthoredBy": false,
+  "respectGitignore": true
+}

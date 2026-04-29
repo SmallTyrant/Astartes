@@ -1,0 +1,6 @@
+{
+  "name": "astartes-tc",
+  "description": "디자인/PRD/문서로부터 iOS·Android·Web 테스트 케이스와 시트 워크북을 생성하는 한국 QA 표준 포맷 하네스. 핵심 expertise는 tc-sheet skill에 응축.",
+  "version": "0.1.0",
+  "author": { "name": "kim ki tae" }
+}

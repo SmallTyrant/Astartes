@@ -1,0 +1,40 @@
+{
+  "source_type": "figma",
+  "fetched_at": "2026-04-29T00:00:00+00:00",
+  "input_uri": "fixture://sample-figma",
+  "file_key": "FIXTURE",
+  "raw": {
+    "name": "Sample App",
+    "lastModified": "2026-04-28T12:00:00Z"
+  },
+  "normalized": {
+    "name": "Sample App",
+    "last_modified": "2026-04-28T12:00:00Z",
+    "frames": [
+      {
+        "id": "1:100",
+        "name": "Login",
+        "type": "FRAME",
+        "absolute_bbox": {"x": 0, "y": 0, "width": 375, "height": 812},
+        "text_layers": [
+          "로그인",
+          "이메일",
+          "비밀번호",
+          "로그인 버튼",
+          "비밀번호 찾기"
+        ]
+      },
+      {
+        "id": "1:200",
+        "name": "Home",
+        "type": "FRAME",
+        "absolute_bbox": {"x": 0, "y": 0, "width": 375, "height": 812},
+        "text_layers": [
+          "환영합니다",
+          "최근 활동",
+          "설정"
+        ]
+      }
+    ]
+  }
+}

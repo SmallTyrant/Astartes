@@ -1,0 +1,32 @@
+{
+  "source_type": "notion",
+  "fetched_at": "2026-04-29T00:00:00+00:00",
+  "input_uri": "fixture://sample-notion",
+  "raw": {
+    "page": {"id": "fixture-page", "url": "fixture://sample-notion"},
+    "blocks": []
+  },
+  "normalized": {
+    "page_id": "fixture-page",
+    "blocks": [
+      {
+        "block_id": "block-1",
+        "type": "heading_1",
+        "plain_text": "Auth 모듈 설계 노트",
+        "parent": null
+      },
+      {
+        "block_id": "block-2",
+        "type": "paragraph",
+        "plain_text": "5회 실패 잠금 정책은 Redis로 카운터 관리. 키 만료 600초.",
+        "parent": null
+      },
+      {
+        "block_id": "block-3",
+        "type": "bulleted_list_item",
+        "plain_text": "잠금 해제는 자동 + 운영자 수동 둘 다 지원",
+        "parent": null
+      }
+    ]
+  }
+}
