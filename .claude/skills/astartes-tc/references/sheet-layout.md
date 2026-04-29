@@ -187,4 +187,4 @@ J19: =IFERROR((D19+E19+F19)/C19,0)     # 0.00%
 5. summury 합계 행(Row 19)가 채워졌고 비율이 `0.00%`.
 6. priority 조건부 서식 색이 high/mid/low에 적용됨.
 
-위반 항목이 있으면 export 스크립트를 고친 뒤 `python3 .claude/skills/tc-sheet/scripts/export_workbook.py {appname}` 재실행.
+위반 항목이 있으면 export 스크립트를 고친 뒤 `python3 .claude/skills/astartes-tc/scripts/export_workbook.py {appname}` 재실행.

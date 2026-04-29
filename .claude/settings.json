@@ -52,7 +52,7 @@
       "Bash(python3 scripts/fetch_notion.py:*)",
       "Bash(python3 scripts/fetch_slack.py:*)",
       "Bash(python3 scripts/parse_pdf.py:*)",
-      "Bash(python3 .claude/skills/tc-sheet/scripts/export_workbook.py:*)",
+      "Bash(python3 .claude/skills/astartes-tc/scripts/export_workbook.py:*)",
       "Bash(rm outputs/sheets/:*)",
       "Write(outputs/sheets/**)",
       "Edit(outputs/sheets/**)"

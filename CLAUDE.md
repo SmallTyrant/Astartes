@@ -32,8 +32,8 @@
 
 ## TC 스키마 (시트 형식 통일, v3)
 
-전체 스키마·시트 컬럼 매핑·탭 분리 규칙·구 스키마 호환성은 `.claude/skills/tc-sheet/references/tc-schema-v3.md` 참조.
-시트 작성 자체의 골자(1 워크북/앱, 헤더 위치, priority 색, result 빈 칸, 명시적 행 범위 수식, 1 버튼=1 step)는 `tc-sheet` skill 이 강제한다.
+전체 스키마·시트 컬럼 매핑·탭 분리 규칙·구 스키마 호환성은 `.claude/skills/astartes-tc/references/tc-schema-v3.md` 참조.
+시트 작성 자체의 골자(1 워크북/앱, 헤더 위치, priority 색, result 빈 칸, 명시적 행 범위 수식, 1 버튼=1 step)는 `astartes-tc` skill 이 강제한다.
 
 ## 자동화 코드 컨벤션
 - iOS: Page Object 패턴, XCTest + XCUITest. `outputs/ios/PageObjects/`에 화면별 PO 클래스. accessibility identifier로만 매칭.
@@ -60,7 +60,7 @@
 3. 카테고리별 초안 → `outputs/intermediate/tc-{functional,security,negative}.json` (v3 스키마)
 4. 리뷰 반영본 → `outputs/intermediate/tc-reviewed.json`
 5. 시트 탭별 최종 JSON → `outputs/testcases/{screen-slug}_{platform}.json`
-6. 앱 단위 시트 워크북 → `outputs/sheets/{appname}.xlsx` — `tc-sheet` skill로 위임 (골자/포맷/수식 사양은 skill SKILL.md + references/ 참조).
+6. 앱 단위 시트 워크북 → `outputs/sheets/{appname}.xlsx` — `astartes-tc` skill로 위임 (골자/포맷/수식 사양은 skill SKILL.md + references/ 참조).
 7. 요구사항 추적성 → `outputs/traceability.csv` (컬럼: requirement_id, screen, platform, tc_id, priority, risk_tags, source_refs, note)
 8. 자동화 후보 → `outputs/testcases/automation_candidates.json`
 

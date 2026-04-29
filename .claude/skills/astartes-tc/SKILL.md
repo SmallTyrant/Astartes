@@ -1,9 +1,9 @@
 ---
-name: tc-sheet
+name: astartes-tc
 description: TC JSON을 한국 QA 표준 포맷의 단일 XLSX 워크북(summury 시트 + (screen, platform) 탭들)으로 변환한다. 시트 작성 시 강제 규칙 — 1 버튼=1 step, result 컬럼 빈 칸, summury 통계는 명시적 행 범위 수식, 드롭다운은 데이터 행에만 — 을 적용한다. 사용 시점: TC를 새로 작성할 때, 기존 TC를 시트로 export할 때, #NAME? 등 시트 서식이 깨졌을 때, 또는 사용자가 "시트로 만들어줘"·"엑셀로 뽑아줘"라고 요청할 때.
 ---
 
-# TC Sheet Skill
+# Astartes TC Skill
 
 한국 QA 팀의 표준 스프레드시트 포맷(참조: `1A2kYCVhc0hICxErL5M1mwM17Bkx88aCXHf0nKvY9s1s`)에 맞춰 테스트 케이스 워크북을 만들고 검증한다.
 
@@ -38,7 +38,7 @@ description: TC JSON을 한국 QA 표준 포맷의 단일 XLSX 워크북(summury
 ## 워크플로우
 
 1. **TC JSON 점검** — `outputs/testcases/*.json` 모두 v3 스키마 준수, `result` 모두 `""`, `steps` 1~5개, 각 step이 단일 동작인지 확인. 위반 시 먼저 JSON을 고친다 (export 후 고치지 말 것).
-2. **워크북 생성** — `python3 .claude/skills/tc-sheet/scripts/export_workbook.py <appname>` 실행.
+2. **워크북 생성** — `python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>` 실행.
 3. **시트 검증** — openpyxl로 다시 읽거나 직접 열어서 다음 5가지 확인:
    - summury R10~ 의 수식이 명시적 행 번호 (`B3:B{N}`, `K3:K{N}`)인가
    - K 컬럼 데이터 검증 범위가 `K3:K{last_row}`인가 (빈 행 제외)

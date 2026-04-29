@@ -1,6 +1,6 @@
-# Astartes — 디자인-to-TC 자동생성 하네스 (+ tc-sheet 스킬)
+# Astartes — 디자인-to-TC 자동생성 하네스 (+ astartes-tc 스킬)
 
-Figma · PDF · Notion · Slack · PRD/API 스펙으로부터 iOS / Android / Web 3개 플랫폼의 테스트 케이스(TC)와 자동화 스켈레톤을 자동 생성하는 Claude Code 기반 하네스. **TC 시트 작성 노하우(한국 QA 표준 포맷)는 `tc-sheet` skill 로 응축되어 있다.**
+Figma · PDF · Notion · Slack · PRD/API 스펙으로부터 iOS / Android / Web 3개 플랫폼의 테스트 케이스(TC)와 자동화 스켈레톤을 자동 생성하는 Claude Code 기반 하네스. **TC 시트 작성 노하우(한국 QA 표준 포맷)는 `astartes-tc` skill 로 응축되어 있다.**
 
 ## 한 눈에 보기
 
@@ -8,7 +8,7 @@ Figma · PDF · Notion · Slack · PRD/API 스펙으로부터 iOS / Android / We
 입력           →  하네스 + 스킬     →  산출물
 ─────────────────────────────────────────────────────────────────
 Figma URL          /gen-tc           outputs/testcases/{screen}_{platform}.json
-PDF                /astartes-tc:tc-sheet
+PDF                /astartes-tc:astartes-tc
                                      outputs/sheets/{appname}.xlsx  ← 단일 워크북
 Notion 페이지                         outputs/{ios,android,web}/  (자동화 코드)
 Slack 스레드                          outputs/traceability.csv
@@ -24,7 +24,7 @@ PRD/API 스펙                          outputs/intermediate/coverage-gaps.json
 | 자산 | 위치 | 역할 |
 | ---- | ---- | ---- |
 | **astartes-tc plugin** | `.claude/.claude-plugin/plugin.json` | 13개 subagent + 2개 slash command + hooks + 1개 skill 묶음 |
-| **tc-sheet skill** | `.claude/skills/tc-sheet/` | TC JSON → 한국 QA 표준 XLSX 변환 노하우 (시트 골자/Step 분해/수식 사양) |
+| **astartes-tc skill** | `.claude/skills/astartes-tc/` | TC JSON → 한국 QA 표준 XLSX 변환 노하우 (시트 골자/Step 분해/수식 사양) |
 
 플러그인은 프로젝트-로컬(`.claude/`)로 묶여 있어 이 저장소를 clone 한 디렉토리에서 Claude Code 를 열면 자동으로 인식된다. marketplace 업로드는 별도 단계.
 
@@ -83,13 +83,13 @@ export SLACK_TOKEN=...
 |---|---|
 | `/setup [--force] [--browsers]` | 의존성 부트스트랩 (Python venv + npm + Playwright) |
 | `/gen-tc <source-spec> [platforms]` | 전체 파이프라인 실행 (10단계, 디자인-루프 포함) |
-| `/astartes-tc:tc-sheet` | TC JSON → 한국 QA 표준 XLSX 워크북 변환 (단독 호출 가능) |
+| `/astartes-tc:astartes-tc` | TC JSON → 한국 QA 표준 XLSX 워크북 변환 (단독 호출 가능) |
 
-`/gen-tc` 의 step 8 은 내부적으로 `tc-sheet` skill 을 호출한다. JSON 만 손으로 손봤다면 `/astartes-tc:tc-sheet` 단독 호출로 워크북만 다시 만들 수 있다.
+`/gen-tc` 의 step 8 은 내부적으로 `astartes-tc` skill 을 호출한다. JSON 만 손으로 손봤다면 `/astartes-tc:astartes-tc` 단독 호출로 워크북만 다시 만들 수 있다.
 
-> **호출 형식 주의**: 이 skill 은 `astartes-tc` plugin 안에 들어 있어서 **반드시 `<plugin-name>:<skill-name>` 네임스페이스**로 호출해야 한다. `/tc-sheet` 또는 `/astartes` 단독은 동작하지 않는다 (Claude Code 공식 동작).
+> **호출 형식 주의**: 이 skill 은 `astartes-tc` plugin 안에 들어 있어서 **반드시 `<plugin-name>:<skill-name>` 네임스페이스**로 호출해야 한다. `/astartes-tc` 또는 `/astartes` 단독은 동작하지 않는다 (Claude Code 공식 동작).
 
-## tc-sheet 스킬 단독 사용
+## astartes-tc 스킬 단독 사용
 
 다른 프로젝트에서도 이 skill 만 떼어 쓸 수 있다.
 
@@ -98,8 +98,8 @@ export SLACK_TOKEN=...
 | 시점 | 호출 |
 | ---- | ---- |
 | Claude 가 자동 판단 | `outputs/testcases/*.json` 가 보이거나 사용자가 "시트로 뽑아줘" 같이 말하면 SKILL.md frontmatter 의 description 매칭으로 자동 invoke |
-| 사용자 명시 호출 | `/astartes-tc:tc-sheet` 입력 (plugin 네임스페이스 필수) |
-| CLI 직접 호출 | `python3 .claude/skills/tc-sheet/scripts/export_workbook.py <appname>` |
+| 사용자 명시 호출 | `/astartes-tc:astartes-tc` 입력 (plugin 네임스페이스 필수) |
+| CLI 직접 호출 | `python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>` |
 
 ### 2. 입력 / 출력 계약
 
@@ -128,24 +128,24 @@ export SLACK_TOKEN=...
        "'생성' 버튼을 탭한다"]
 ```
 
-5 step 한도(`1 Step ~ 5 Step`)는 절대 한도. 더 길면 사전조건으로 압축하거나 시나리오를 둘로 쪼갠다. 자세한 어휘·예시는 [`.claude/skills/tc-sheet/references/step-decomposition.md`](./.claude/skills/tc-sheet/references/step-decomposition.md).
+5 step 한도(`1 Step ~ 5 Step`)는 절대 한도. 더 길면 사전조건으로 압축하거나 시나리오를 둘로 쪼갠다. 자세한 어휘·예시는 [`.claude/skills/astartes-tc/references/step-decomposition.md`](./.claude/skills/astartes-tc/references/step-decomposition.md).
 
 ### 5. 다른 프로젝트로 이식
 
 skill 디렉토리만 통째로 복사:
 
 ```bash
-cp -r .claude/skills/tc-sheet /path/to/other-project/.claude/skills/
+cp -r .claude/skills/astartes-tc /path/to/other-project/.claude/skills/
 ```
 
 또는 사용자 전역(`~/.claude/skills/`)에 두면 모든 프로젝트에서 호출 가능. 의존성은 `pip install openpyxl` 한 줄.
 
 ### 6. skill 내부 문서
 
-- [`.claude/skills/tc-sheet/SKILL.md`](./.claude/skills/tc-sheet/SKILL.md) — frontmatter + 6개 본문 섹션 (언제 사용 / 골자 / Step 분해 / 워크플로우 / 금지 사항 / 참고)
-- [`.claude/skills/tc-sheet/references/sheet-layout.md`](./.claude/skills/tc-sheet/references/sheet-layout.md) — 셀 좌표·색상 hex·수식 패턴 전체 사양
-- [`.claude/skills/tc-sheet/references/step-decomposition.md`](./.claude/skills/tc-sheet/references/step-decomposition.md) — Step 분해 사례·어휘·5 step 한도 처리법
-- [`.claude/skills/tc-sheet/references/tc-schema-v3.md`](./.claude/skills/tc-sheet/references/tc-schema-v3.md) — TC JSON v3 스키마
+- [`.claude/skills/astartes-tc/SKILL.md`](./.claude/skills/astartes-tc/SKILL.md) — frontmatter + 6개 본문 섹션 (언제 사용 / 골자 / Step 분해 / 워크플로우 / 금지 사항 / 참고)
+- [`.claude/skills/astartes-tc/references/sheet-layout.md`](./.claude/skills/astartes-tc/references/sheet-layout.md) — 셀 좌표·색상 hex·수식 패턴 전체 사양
+- [`.claude/skills/astartes-tc/references/step-decomposition.md`](./.claude/skills/astartes-tc/references/step-decomposition.md) — Step 분해 사례·어휘·5 step 한도 처리법
+- [`.claude/skills/astartes-tc/references/tc-schema-v3.md`](./.claude/skills/astartes-tc/references/tc-schema-v3.md) — TC JSON v3 스키마
 
 ## 파이프라인 10 단계
 
@@ -175,7 +175,7 @@ outputs/
 │   ├── {screen-slug}_{and|ios|web}.json  # 시트 탭 단위 최종 JSON (v3 스키마)
 │   └── automation_candidates.json
 ├── sheets/
-│   └── {appname}.xlsx                    # 앱당 1개 워크북 (summury + 탭들, tc-sheet skill 출력)
+│   └── {appname}.xlsx                    # 앱당 1개 워크북 (summury + 탭들, astartes-tc skill 출력)
 ├── ios/{Tests,PageObjects,Fixtures}/
 ├── android/{tests,screens,fixtures}/
 ├── web/{tests,pages,fixtures}/
@@ -194,7 +194,7 @@ TC ID | priority | 1 Step | 2 Step | 3 Step | 4 Step | 5 Step | pre-condition | 
 
 JSON 내부 전용(시트 export 시 제외): `requirement_id`, `source_refs[]`, `risk_tags[]`, `negative`, `needs_review`.
 
-전체 사양·구 스키마 호환성은 [`.claude/skills/tc-sheet/references/tc-schema-v3.md`](./.claude/skills/tc-sheet/references/tc-schema-v3.md).
+전체 사양·구 스키마 호환성은 [`.claude/skills/astartes-tc/references/tc-schema-v3.md`](./.claude/skills/astartes-tc/references/tc-schema-v3.md).
 
 ## 디자인-루프 동작
 
@@ -242,7 +242,7 @@ JSON 내부 전용(시트 export 시 제외): `requirement_id`, `source_refs[]`,
 │   ├── commands/            # /setup, /gen-tc
 │   ├── hooks/               # mask_pii, validate_tc_schema, check_*
 │   └── skills/
-│       └── tc-sheet/        # ← TC 시트 작성 스킬
+│       └── astartes-tc/     # ← TC 시트 작성 스킬
 │           ├── SKILL.md
 │           ├── scripts/export_workbook.py
 │           └── references/{sheet-layout,step-decomposition,tc-schema-v3}.md
@@ -269,8 +269,8 @@ JSON 내부 전용(시트 export 시 제외): `requirement_id`, `source_refs[]`,
 ## 참고 문서
 
 - [`CLAUDE.md`](./CLAUDE.md) — Claude Code용 프로젝트 지침
-- [`.claude/skills/tc-sheet/SKILL.md`](./.claude/skills/tc-sheet/SKILL.md) — TC 시트 스킬 진입점
-- [`.claude/skills/tc-sheet/references/`](./.claude/skills/tc-sheet/references/) — 시트 레이아웃·step 분해·v3 스키마 사양
+- [`.claude/skills/astartes-tc/SKILL.md`](./.claude/skills/astartes-tc/SKILL.md) — TC 시트 스킬 진입점
+- [`.claude/skills/astartes-tc/references/`](./.claude/skills/astartes-tc/references/) — 시트 레이아웃·step 분해·v3 스키마 사양
 - [`inputs/README.md`](./inputs/README.md) — 입력 경로(링크/로컬/픽스처) 상세
 - `.claude/agents/*.md` — 13개 서브 에이전트 명세
 - `.claude/commands/*.md` — 슬래시 명령 정의

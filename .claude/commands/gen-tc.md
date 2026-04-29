@@ -1,7 +1,7 @@
 ---
 description: 디자인/문서 입력으로부터 시트 형식 TC 풀세트 생성 (수집→분석→중복검사→생성→정규화→탭분리→시트export→코드젠→감사→디자인루프)
 argument-hint: <source-spec> [platforms]
-allowed-tools: Read, Glob, Grep, Bash(git diff:*), Bash(ls:*), Bash(python3 scripts/fetch_figma.py:*), Bash(python3 scripts/fetch_notion.py:*), Bash(python3 scripts/fetch_slack.py:*), Bash(python3 scripts/parse_pdf.py:*), Bash(python3 .claude/skills/tc-sheet/scripts/export_workbook.py:*), Bash(npx:*)
+allowed-tools: Read, Glob, Grep, Bash(git diff:*), Bash(ls:*), Bash(python3 scripts/fetch_figma.py:*), Bash(python3 scripts/fetch_notion.py:*), Bash(python3 scripts/fetch_slack.py:*), Bash(python3 scripts/parse_pdf.py:*), Bash(python3 .claude/skills/astartes-tc/scripts/export_workbook.py:*), Bash(npx:*)
 model: sonnet
 ---
 
@@ -45,8 +45,8 @@ platforms: $2     (예: `ios,android,web` 또는 일부; Android는 시트 키 "
    - 각 파일 안에서 `tc_id` 1부터 연속 재부여.
    - PostToolUse hook이 자동으로 v3 스키마 검증.
 
-8. **시트 export (`tc-sheet` skill 위임)**: Skill `tc-sheet` 호출 → 내부적으로 `python3 .claude/skills/tc-sheet/scripts/export_workbook.py <appname>` 실행.
-   - 시트 골자(불변 5가지: 1 워크북/앱, B~L 헤더, priority 색, result 빈 칸, summury 명시적 행 범위 수식)와 step 분해 규칙(1 버튼=1 step)은 `tc-sheet` skill의 SKILL.md에서 강제. 자세한 사양은 `.claude/skills/tc-sheet/references/{sheet-layout,step-decomposition,tc-schema-v3}.md`.
+8. **시트 export (`astartes-tc` skill 위임)**: Skill `astartes-tc` 호출 → 내부적으로 `python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>` 실행.
+   - 시트 골자(불변 5가지: 1 워크북/앱, B~L 헤더, priority 색, result 빈 칸, summury 명시적 행 범위 수식)와 step 분해 규칙(1 버튼=1 step)은 `astartes-tc` skill의 SKILL.md에서 강제. 자세한 사양은 `.claude/skills/astartes-tc/references/{sheet-layout,step-decomposition,tc-schema-v3}.md`.
    - 입력: `outputs/testcases/*.json` / 출력: `outputs/sheets/{appname}.xlsx`.
    - Google Sheets에 import: `파일 → 가져오기 → 업로드 → 새 스프레드시트로 가져오기`.
 
@@ -68,7 +68,7 @@ platforms: $2     (예: `ios,android,web` 또는 일부; Android는 시트 키 "
        2. `tc-reviewer` dedup 모드 (loop=true: 기존 (screen, platform, steps) 시퀀스도 비교).
        3. `tc-normalizer` `mode=merge`로 신규 TC만 append → `outputs/intermediate/tc-reviewed.json` 갱신.
        4. `tc-platform-splitter` 재실행 — 신규 TC만 각 탭 파일에 append (`tc_id`는 기존 최댓값+1부터).
-       5. `tc-sheet` skill 재호출 (`python3 .claude/skills/tc-sheet/scripts/export_workbook.py <appname>`) — 워크북 전체 재생성(탭 추가/갱신, summury 통계도 자동 재계산).
+       5. `astartes-tc` skill 재호출 (`python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>`) — 워크북 전체 재생성(탭 추가/갱신, summury 통계도 자동 재계산).
        6. `codegen-{ios,android,web}` (target_platforms에 따라) — 신규 TC에 대응되는 델타 파일만 생성, 기존 파일 보존.
        7. `coverage-auditor` 재실행, `iteration += 1`.
     - e) 매 iter 종료 시 1줄 요약: `iter=N, coverage=X/Y (Z%), figma_gaps=K, complete=true|false`.

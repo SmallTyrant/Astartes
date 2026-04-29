@@ -19,7 +19,7 @@
     - 마지막 행: 총 합계
 
 사용:
-  python3 .claude/skills/tc-sheet/scripts/export_workbook.py [앱명]
+  python3 .claude/skills/astartes-tc/scripts/export_workbook.py [앱명]
   - 앱명 미지정 시 'app' 사용
 """
 from __future__ import annotations
@@ -35,8 +35,8 @@ from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import CellIsRule
 
-# 프로젝트 루트: <project>/.claude/skills/tc-sheet/scripts/export_workbook.py
-#   parents[0]=scripts/  [1]=tc-sheet/  [2]=skills/  [3]=.claude/  [4]=<project>
+# 프로젝트 루트: <project>/.claude/skills/astartes-tc/scripts/export_workbook.py
+#   parents[0]=scripts/  [1]=astartes-tc/  [2]=skills/  [3]=.claude/  [4]=<project>
 ROOT = Path(__file__).resolve().parents[4]
 SRC_DIR = ROOT / "outputs" / "testcases"
 OUT_DIR = ROOT / "outputs" / "sheets"
