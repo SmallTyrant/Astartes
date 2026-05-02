@@ -1,5 +1,7 @@
 # Astartes
 
+![](https://ac-o.namu.la/20241107sac/40aea85449c06d2d13d53db56e1e922bbedf64a03715f99f4dd1bda4b5e2bfeb.png?expires=1777696419&key=2z1DmJulnXqhYgscMFXBrA&type=orig)
+
 > 명세서를 넣으면 TC 시트와 자동화 코드가 나옵니다
 
 ![overview](docs/images/overview.svg)
