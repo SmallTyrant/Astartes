@@ -1,0 +1,152 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1777514597005,
+  "projectRoot": "/Users/perlihite/Desktop/Astartes",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "scripts",
+      "tests"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "inputs": {
+      "path": "inputs",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1777514597000,
+      "keyFiles": [
+        "README.md"
+      ]
+    },
+    "outputs": {
+      "path": "outputs",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1777514597000,
+      "keyFiles": []
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 8,
+      "lastAccessed": 1777514597001,
+      "keyFiles": [
+        "bootstrap.sh",
+        "check_traceability.py",
+        "dedupe_tc.py",
+        "fetch_figma.py",
+        "fetch_notion.py"
+      ]
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 0,
+      "lastAccessed": 1777514597001,
+      "keyFiles": []
+    },
+    "tests/fixtures": {
+      "path": "tests/fixtures",
+      "purpose": "Test fixtures",
+      "fileCount": 4,
+      "lastAccessed": 1777514597001,
+      "keyFiles": [
+        "sample-figma.json",
+        "sample-notion.json",
+        "sample-pdf.txt"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "README.md",
+      "accessCount": 12,
+      "lastAccessed": 1777692116412,
+      "type": "file"
+    },
+    {
+      "path": ".claude/skills/astartes-tc/scripts/export_workbook.py",
+      "accessCount": 5,
+      "lastAccessed": 1777690512058,
+      "type": "file"
+    },
+    {
+      "path": ".claude/skills/astartes-tc/SKILL.md",
+      "accessCount": 5,
+      "lastAccessed": 1777691554005,
+      "type": "file"
+    },
+    {
+      "path": ".claude/commands/gen-tc.md",
+      "accessCount": 3,
+      "lastAccessed": 1777691227389,
+      "type": "file"
+    },
+    {
+      "path": ".claude/commands/astartes-tc.md",
+      "accessCount": 3,
+      "lastAccessed": 1777691478614,
+      "type": "file"
+    },
+    {
+      "path": ".claude/agents/mcp-ingester.md",
+      "accessCount": 2,
+      "lastAccessed": 1777690656648,
+      "type": "file"
+    },
+    {
+      "path": ".claude/agents/requirement-analyzer.md",
+      "accessCount": 2,
+      "lastAccessed": 1777690672496,
+      "type": "file"
+    },
+    {
+      "path": "CLAUDE.md",
+      "accessCount": 2,
+      "lastAccessed": 1777691600056,
+      "type": "directory"
+    },
+    {
+      "path": ".claude/commands/setup.md",
+      "accessCount": 2,
+      "lastAccessed": 1777692094430,
+      "type": "file"
+    },
+    {
+      "path": ".claude",
+      "accessCount": 1,
+      "lastAccessed": 1777690251874,
+      "type": "directory"
+    },
+    {
+      "path": ".claude/commands/astartes-doctor.md",
+      "accessCount": 1,
+      "lastAccessed": 1777692089659,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
