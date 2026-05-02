@@ -68,16 +68,16 @@ python3·venv·openpyxl·node·Playwright 등 필요한 의존성을 자동으�
 URL·파일 경로를 그대로 붙여넣으면 된다. 소스 타입은 자동 감지.
 
 ```
-/astartes-tc gen-tc [url/path ...] [platforms]
+/astartes-tc [url/path ...] [platforms]
 ```
 
 | 예시 | 설명 |
 |---|---|
-| `/astartes-tc gen-tc https://figma.com/... ./spec.pdf` | Figma + PDF → 3 플랫폼 |
-| `/astartes-tc gen-tc https://figma.com/... ios,web` | Figma → iOS + Web만 |
-| `/astartes-tc gen-tc` | `inputs/` 폴더에 넣은 파일로 생성 |
-| `/astartes-tc gen-tc fixture-mode` | 토큰·파일 없이 픽스처로 즉시 테스트 |
-| `/astartes-tc` | TC 재생성 없이 XLSX export만 |
+| `/astartes-tc https://figma.com/... ./spec.pdf` | Figma + PDF → 3 플랫폼 TC 생성 |
+| `/astartes-tc https://figma.com/... ios,web` | Figma → iOS + Web만 생성 |
+| `/astartes-tc` | `inputs/` 폴더 파일로 TC 생성 |
+| `/astartes-tc fixture-mode` | 토큰·파일 없이 픽스처로 즉시 테스트 |
+| `/astartes-tc --export-only` | TC 재생성 없이 XLSX export만 |
 
 **링크 소스 사용 시** API 토큰 필요:
 ```bash
@@ -86,15 +86,15 @@ export NOTION_TOKEN=...  # Notion URL 사용 시
 export SLACK_TOKEN=...   # Slack URL 사용 시
 ```
 
-**로컬 파일 사용 시** `inputs/{figma,notion,slack}/export/` 또는 `inputs/pdf/`에 파일을 넣고 `/astartes-tc gen-tc` 실행.
+**로컬 파일 사용 시** `inputs/{figma,notion,slack}/export/` 또는 `inputs/pdf/`에 파일을 넣고 `/astartes-tc` 실행.
 
 ## 명령 레퍼런스
 
 | 명령 | 역할 |
 |---|---|
 | `/astartes-doctor [--force] [--browsers] [--check]` | 의존성 점검·설치·자동 수복 |
-| `/astartes-tc` | 기존 TC JSON → XLSX export + Drive 업로드 (재생성 없음) |
-| `/astartes-tc gen-tc [url/path ...] [platforms]` | 소스 자동 감지 → TC 생성 → XLSX export → Drive 업로드 |
+| `/astartes-tc [url/path ...] [platforms]` | 소스 자동 감지 → TC 생성 → XLSX export → Drive 업로드 |
+| `/astartes-tc --export-only` | TC 재생성 없이 XLSX export + Drive 업로드만 |
 
 **소스 자동 감지**: URL/경로를 나열하면 타입을 자동 판별한다. `figma.com` → figma, `slack.com` → slack, `.pdf` → pdf, `notion.so` → notion. 인자 없으면 `local`(로컬 드롭 스캔) 기본.
 

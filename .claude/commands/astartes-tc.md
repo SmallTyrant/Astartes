@@ -1,6 +1,6 @@
 ---
-description: TC 워크북 통합 진입점. 인자 없으면 기존 JSON을 XLSX로 export. 'gen-tc' 옵션을 추가하면 소스를 새로 읽어 TC를 생성·업데이트한다.
-argument-hint: [gen-tc [url-or-path ...] [platforms]]
+description: TC 워크북 통합 진입점. URL/경로를 나열하면 소스를 자동 감지해 TC를 생성한다. 인자 없으면 로컬 inputs/ 파일로 생성. --export-only면 기존 JSON을 XLSX로 export만 한다.
+argument-hint: [url-or-path ...] [platforms] | [--export-only]
 allowed-tools: Read, Glob, Grep, Bash(git diff:*), Bash(ls:*), Bash(python3 scripts/fetch_figma.py:*), Bash(python3 scripts/fetch_notion.py:*), Bash(python3 scripts/fetch_slack.py:*), Bash(python3 scripts/parse_pdf.py:*), Bash(python3 .claude/skills/astartes-tc/scripts/export_workbook.py:*), Bash(npx:*)
 model: sonnet
 ---
@@ -12,14 +12,14 @@ model: sonnet
 
 ## 모드 분기
 
-`$ARGUMENTS`의 첫 번째 토큰을 확인한다:
+`$ARGUMENTS`를 확인한다:
 
-- **`gen-tc` 포함** (`/astartes-tc gen-tc [sources] [platforms]`) → **[TC 생성 모드]** 아래 소스 자동 감지 + 전체 파이프라인 실행.
-- **그 외 / 인자 없음** (`/astartes-tc`) → **[XLSX Export 모드]** 기존 `outputs/testcases/*.json`을 바로 XLSX로 변환. 소스 재수집·TC 재생성 없이 `astartes-tc` skill 워크플로우(TC JSON 점검 → 워크북 생성 → 시트 검증 → Drive 업로드)만 수행.
+- **`--export-only`** → **[XLSX Export 모드]** 기존 `outputs/testcases/*.json`을 XLSX로 변환만 한다. 소스 재수집·TC 재생성 없음.
+- **그 외 (URL·경로·키워드·인자 없음)** → **[TC 생성 모드]** 소스 자동 감지 후 전체 파이프라인 실행. 인자 없으면 `local`(inputs/ 폴더 스캔) 기본.
 
 ---
 
-## [XLSX Export 모드] — 인자 없음
+## [XLSX Export 모드] — --export-only
 
 `outputs/testcases/*.json` → XLSX export만 수행:
 
@@ -34,7 +34,7 @@ model: sonnet
 
 ### 소스 자동 감지
 
-`gen-tc` 토큰을 제외한 나머지 인자를 공백·쉼표로 분리해 각 토큰을 아래 규칙으로 `type:value` source-spec으로 변환한다.
+`$ARGUMENTS`를 공백·쉼표로 분리해 각 토큰을 아래 규칙으로 `type:value` source-spec으로 변환한다.
 
 | 패턴 | 감지 타입 |
 |---|---|
