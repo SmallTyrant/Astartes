@@ -64,40 +64,30 @@ pip install openpyxl
 - `/setup --force` — 강제 재설치
 - `/setup --browsers` — Playwright 브라우저까지 (~300MB, 시간 소요)
 
-### 2. 입력 준비
+### 2. 실행
 
-방식 A (링크): API 토큰을 환경변수로 설정한 뒤 URL을 그대로 붙여넣는다.
-
-```bash
-export FIGMA_TOKEN=...
-export NOTION_TOKEN=...
-export SLACK_TOKEN=...
-```
-
-방식 B (로컬 드롭): `inputs/{figma,notion,slack}/export/`와 `inputs/pdf/`에 파일을 직접 넣는다.
-
-방식 C (테스트): 토큰·파일 없이 `tests/fixtures/sample-*` 픽스처로 즉시 검증 가능.
-
-상세는 [`inputs/README.md`](./inputs/README.md).
-
-### 3. 실행
+URL·파일 경로를 그대로 붙여넣으면 된다. 소스 타입은 자동 감지.
 
 ```
 /astartes-tc gen-tc [url/path ...] [platforms]
 ```
 
-URL과 경로를 나열하면 소스 타입을 자동 감지한다. `figma.com` → Figma, `slack.com` → Slack, `.pdf` → PDF, `notion.so` → Notion.
-
-| 호출 | 의미 |
+| 예시 | 설명 |
 |---|---|
-| `/astartes-tc gen-tc fixture-mode` | 픽스처로 3 플랫폼 모두 생성 (가장 빠른 검증) |
-| `/astartes-tc gen-tc` | 로컬 드롭한 파일로 3 플랫폼 모두 생성 |
-| `/astartes-tc gen-tc web` | 로컬 드롭으로 Web만 생성 |
-| `/astartes-tc gen-tc https://figma.com/... ./inputs/pdf/x.pdf` | Figma + PDF, 3 플랫폼 모두 |
-| `/astartes-tc gen-tc https://figma.com/... https://notion.so/... ios,web` | Figma + Notion, iOS+Web만 |
-| `/astartes-tc` | 기존 TC JSON → XLSX export만 (소스 재수집 없음) |
+| `/astartes-tc gen-tc https://figma.com/... ./spec.pdf` | Figma + PDF → 3 플랫폼 |
+| `/astartes-tc gen-tc https://figma.com/... ios,web` | Figma → iOS + Web만 |
+| `/astartes-tc gen-tc` | `inputs/` 폴더에 넣은 파일로 생성 |
+| `/astartes-tc gen-tc fixture-mode` | 토큰·파일 없이 픽스처로 즉시 테스트 |
+| `/astartes-tc` | TC 재생성 없이 XLSX export만 |
 
-`platforms` 인자 생략 시 `ios,android,web` 기본.
+**링크 소스 사용 시** API 토큰 필요:
+```bash
+export FIGMA_TOKEN=...   # Figma URL 사용 시
+export NOTION_TOKEN=...  # Notion URL 사용 시
+export SLACK_TOKEN=...   # Slack URL 사용 시
+```
+
+**로컬 파일 사용 시** `inputs/{figma,notion,slack}/export/` 또는 `inputs/pdf/`에 파일을 넣고 `/astartes-tc gen-tc` 실행.
 
 ## 명령 레퍼런스
 
