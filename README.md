@@ -121,6 +121,23 @@ export SLACK_TOKEN=...
 | 사용자 명시 호출 | `/astartes-tc:astartes-tc` 입력 (plugin 네임스페이스 필수) |
 | CLI 직접 호출 | `python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>` |
 
+### 1-1. 명세 변경 시 동작 (result 보존)
+
+명세서가 바뀌어 TC JSON이 갱신된 후 export를 재실행하면, `tc_id` + 내용 해시 기반으로 result를 자동 병합한다:
+
+| 케이스 | result |
+|---|---|
+| tc_id 동일 + 내용 무변경 | 기존 `Pass`/`Fail`/`Block`/`N/A` 보존 |
+| tc_id 동일 + 내용 변경 (steps·expected 등) | `""` 초기화 (재수행 필요) |
+| 신규 tc_id | `""` (초기 상태) |
+| 삭제된 tc_id | 해당 행 제거 |
+
+내용 변경 판정 기준: `steps`, `expected`, `precondition`, `priority`, `risk_tags`, `title` 중 하나라도 다르면 초기화. 해시 사이드카는 `outputs/sheets/{appname}_snapshot.json`에 자동 저장.
+
+### 1-2. Google Drive 자동 업로드
+
+XLSX 검증 통과 후 `mcp__claude_ai_Google_Drive__create_file`로 Drive에 자동 업로드한다. 첫 실행 시 인증 필요(`mcp__claude_ai_Google_Drive__authenticate`). 업로드 성공 시 파일 URL을 출력한다. 같은 이름 파일이 이미 있으면 사용자 확인 후 업로드.
+
 ### 2. 입력 / 출력 계약
 
 - 입력: `outputs/testcases/*.json` (v3 스키마, `screen` + `platform` + `steps[1~5]` + `result=""` 필수)
@@ -170,7 +187,12 @@ cp -r .claude/skills/astartes-tc /path/to/other-project/.claude/skills/
 ## 파이프라인 10 단계
 
 1. **mcp-ingester** — source-spec 페치 → `inputs/{type}/raw/`
+   - Figma: 프레임 + **댓글** (`GET /v1/files/{key}/comments`) 수집 → `normalized.comments`
+   - Slack: 채널 메시지 + **스레드 리플라이** (`conversations.replies`) 수집 → `normalized.threads`
+   - PDF: 본문 + **어노테이션·주석** (`--annotations`) 수집 → `normalized.annotations`
 2. **requirement-analyzer** — 입력 통합 → `outputs/intermediate/req-model.json` (모든 행위에 `source_refs`)
+   - 댓글·리플라이·어노테이션을 본문과 동등하게 행위/예외 추출 대상으로 처리
+   - 본문과 상충하면 `conflict: true` 플래그 + 양쪽 내용 병기
 3. **tc-reviewer dedup** — 기존 TC와 0.85 이상 유사 차단
 4. 병렬: **tc-gen-functional / security / negative** → 카테고리별 TC 생성
 5. **tc-reviewer judge** — 평균 4점 미만 또는 고위험 risk_tag P0 0개면 reject
