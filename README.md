@@ -130,6 +130,17 @@ outputs/
 └── traceability.csv             # 요구사항 ↔ TC 추적성
 ```
 
+### 샘플 출력물
+
+GoodNotes App Store 명세를 입력으로 생성한 실제 출력물 예시입니다.
+
+| 파일 | 내용 |
+|------|------|
+| [goodnotes-sample.xlsx](https://github.com/SmallTyrant/Astartes/releases/latest/download/goodnotes-sample.xlsx) | TC 시트 — summury + 화면별 탭 |
+| [tc-sample.json](https://github.com/SmallTyrant/Astartes/releases/latest/download/tc-sample.json) | TC JSON (v3 스키마) |
+
+> `/astartes-tc` 한 줄로 생성된 결과입니다. 입력: [GoodNotes App Store 페이지](https://apps.apple.com/us/app/goodnotes-ai-notes-docs-pdf/id1444383602)
+
 ### 시트 규칙 (변경 불가)
 
 | 항목 | 규칙 |
