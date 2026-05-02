@@ -50,19 +50,18 @@ pip install openpyxl
 
 ## 빠른 시작 (3분)
 
-### 1. 의존성 부트스트랩
-
-세션 시작 시 자동으로 1회 실행되지만, 명시 호출도 가능:
+### 1. 의존성 설치
 
 ```
-/setup
+/astartes-doctor
 ```
 
-수행: `.venv` 생성 → `pip install -r scripts/requirements.txt` → `outputs/web/`에 `package.json`/`tsconfig.json`/`playwright.config.ts` 배치 → `npm install` (Playwright + TypeScript). sentinel `.claude/.bootstrap_done`로 멱등.
+python3·venv·openpyxl·node·Playwright 등 필요한 의존성을 자동으로 점검하고 설치한다. 이미 설치된 항목은 건너뛴다.
 
 옵션:
-- `/setup --force` — 강제 재설치
-- `/setup --browsers` — Playwright 브라우저까지 (~300MB, 시간 소요)
+- `/astartes-doctor --force` — 강제 재설치
+- `/astartes-doctor --browsers` — Playwright 브라우저까지 (~300MB)
+- `/astartes-doctor --check` — 설치 상태만 확인 (변경 없음)
 
 ### 2. 실행
 
@@ -93,7 +92,7 @@ export SLACK_TOKEN=...   # Slack URL 사용 시
 
 | 명령 | 역할 |
 |---|---|
-| `/setup [--force] [--browsers]` | 의존성 부트스트랩 (Python venv + npm + Playwright) |
+| `/astartes-doctor [--force] [--browsers] [--check]` | 의존성 점검·설치·자동 수복 |
 | `/astartes-tc` | 기존 TC JSON → XLSX export + Drive 업로드 (재생성 없음) |
 | `/astartes-tc gen-tc [url/path ...] [platforms]` | 소스 자동 감지 → TC 생성 → XLSX export → Drive 업로드 |
 | `/gen-tc` | ⚠️ deprecated → `/astartes-tc gen-tc` 사용 |

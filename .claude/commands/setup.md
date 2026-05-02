@@ -1,5 +1,5 @@
 ---
-description: Astartes 하네스 의존성 부트스트랩 (venv + Playwright/TS). sentinel 있으면 skip.
+description: "[deprecated → /astartes-doctor 사용] 의존성 부트스트랩"
 argument-hint: [--force] [--browsers]
 allowed-tools: Bash(bash scripts/bootstrap.sh:*), Bash(scripts/bootstrap.sh:*)
 model: sonnet
