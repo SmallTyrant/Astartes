@@ -39,9 +39,9 @@ from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import CellIsRule
 
-# 프로젝트 루트: <project>/.claude/skills/astartes-tc/scripts/export_workbook.py
-#   parents[0]=scripts/  [1]=astartes-tc/  [2]=skills/  [3]=.claude/  [4]=<project>
-ROOT = Path(__file__).resolve().parents[4]
+# 실행 시점의 작업 디렉토리를 프로젝트 루트로 사용.
+# 전역 설치(~/.claude/skills/) 환경에서도 올바른 outputs/ 경로를 얻기 위해 cwd() 사용.
+ROOT = Path.cwd()
 SRC_DIR = ROOT / "outputs" / "testcases"
 OUT_DIR = ROOT / "outputs" / "sheets"
 

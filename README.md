@@ -200,7 +200,7 @@ A. `result` 컬럼은 보존됩니다. TC 내용(steps 등)을 직접 수정한 
 A. 네. `/astartes-tc https://figma.com/... ios,web` 처럼 마지막에 플랫폼을 지정하세요.
 
 **Q. Google Drive 업로드를 건너뛰고 싶어요.**  
-A. Drive MCP가 설정되지 않으면 자동으로 건너뜁니다. 로컬 파일(`outputs/sheets/`)은 항상 생성됩니다.
+A. Drive MCP가 설정되지 않으면 자동으로 건너뜁니다. 로컬 파일은 **명령어를 실행한 폴더** 기준 `outputs/sheets/`에 항상 생성됩니다.
 
 ---
 
