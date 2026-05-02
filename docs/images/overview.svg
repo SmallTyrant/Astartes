@@ -1,0 +1,81 @@
+<svg width="900" height="310" viewBox="0 0 900 310" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#94A3B8"/>
+    </marker>
+    <linearGradient id="centerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="310" fill="#F8FAFC" rx="14"/>
+
+  <!-- ─── LEFT: 입력 소스 ─── -->
+  <text x="110" y="22" text-anchor="middle" font-size="11" fill="#9CA3AF" font-weight="600" letter-spacing="1">입 력 소 스</text>
+
+  <!-- Figma -->
+  <rect x="20" y="32" width="180" height="50" rx="9" fill="#7C3AED"/>
+  <text x="110" y="53" text-anchor="middle" font-size="14" fill="white" font-weight="700">Figma</text>
+  <text x="110" y="71" text-anchor="middle" font-size="10" fill="#DDD6FE">URL · export · 댓글</text>
+
+  <!-- PDF -->
+  <rect x="20" y="92" width="180" height="50" rx="9" fill="#DC2626"/>
+  <text x="110" y="113" text-anchor="middle" font-size="14" fill="white" font-weight="700">PDF</text>
+  <text x="110" y="131" text-anchor="middle" font-size="10" fill="#FCA5A5">기획서 · 어노테이션</text>
+
+  <!-- Slack -->
+  <rect x="20" y="152" width="180" height="50" rx="9" fill="#047857"/>
+  <text x="110" y="173" text-anchor="middle" font-size="14" fill="white" font-weight="700">Slack</text>
+  <text x="110" y="191" text-anchor="middle" font-size="10" fill="#A7F3D0">스레드 · 리플라이</text>
+
+  <!-- Notion / PRD -->
+  <rect x="20" y="212" width="180" height="50" rx="9" fill="#374151"/>
+  <text x="110" y="233" text-anchor="middle" font-size="14" fill="white" font-weight="700">Notion · PRD</text>
+  <text x="110" y="251" text-anchor="middle" font-size="10" fill="#D1D5DB">페이지 · API 스펙</text>
+
+  <!-- Arrow: left → center -->
+  <line x1="208" y1="172" x2="326" y2="172" stroke="#94A3B8" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ─── CENTER: Astartes ─── -->
+  <rect x="336" y="32" width="228" height="230" rx="14" fill="url(#centerGrad)"/>
+  <text x="450" y="90" text-anchor="middle" font-size="24" fill="white" font-weight="800">⚡ Astartes</text>
+  <text x="450" y="112" text-anchor="middle" font-size="11" fill="#475569">/astartes-tc [url/path ...]</text>
+
+  <rect x="356" y="128" width="188" height="118" rx="8" fill="#1E293B"/>
+  <text x="450" y="149" text-anchor="middle" font-size="10" fill="#64748B">① 소스 수집 · 댓글/주석 포함</text>
+  <text x="450" y="167" text-anchor="middle" font-size="10" fill="#64748B">② 요구사항 분석</text>
+  <text x="450" y="185" text-anchor="middle" font-size="10" fill="#64748B">③ TC 생성 (기능 · 보안 · 부정)</text>
+  <text x="450" y="203" text-anchor="middle" font-size="10" fill="#64748B">④ 리뷰 · 정규화 · 플랫폼 분기</text>
+  <text x="450" y="221" text-anchor="middle" font-size="10" fill="#64748B">⑤ 커버리지 검증 · 루프</text>
+
+  <!-- Arrow: center → right -->
+  <line x1="572" y1="172" x2="660" y2="172" stroke="#94A3B8" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ─── RIGHT: 산출물 ─── -->
+  <text x="779" y="22" text-anchor="middle" font-size="11" fill="#9CA3AF" font-weight="600" letter-spacing="1">산 출 물</text>
+
+  <!-- TC 시트 -->
+  <rect x="670" y="32" width="210" height="50" rx="9" fill="#16A34A"/>
+  <text x="775" y="53" text-anchor="middle" font-size="14" fill="white" font-weight="700">TC 시트 (.xlsx)</text>
+  <text x="775" y="71" text-anchor="middle" font-size="10" fill="#BBF7D0">summury + 플랫폼별 탭</text>
+
+  <!-- iOS -->
+  <rect x="670" y="92" width="210" height="50" rx="9" fill="#0284C7"/>
+  <text x="775" y="113" text-anchor="middle" font-size="14" fill="white" font-weight="700">iOS 자동화 코드</text>
+  <text x="775" y="131" text-anchor="middle" font-size="10" fill="#BAE6FD">XCUITest · Swift</text>
+
+  <!-- Android -->
+  <rect x="670" y="152" width="210" height="50" rx="9" fill="#65A30D"/>
+  <text x="775" y="173" text-anchor="middle" font-size="14" fill="white" font-weight="700">Android 자동화 코드</text>
+  <text x="775" y="191" text-anchor="middle" font-size="10" fill="#D9F99D">Espresso · Kotlin</text>
+
+  <!-- Web -->
+  <rect x="670" y="212" width="210" height="50" rx="9" fill="#B45309"/>
+  <text x="775" y="233" text-anchor="middle" font-size="14" fill="white" font-weight="700">Web 자동화 코드</text>
+  <text x="775" y="251" text-anchor="middle" font-size="10" fill="#FDE68A">Playwright · TypeScript</text>
+
+  <!-- Bottom caption -->
+  <text x="450" y="294" text-anchor="middle" font-size="11" fill="#9CA3AF">도메인 무관 — 금융 · 커머스 · 헬스케어 · 에듀테크 모두 동작합니다</text>
+</svg>
