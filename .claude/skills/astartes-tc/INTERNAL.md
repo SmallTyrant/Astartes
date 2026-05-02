@@ -59,7 +59,7 @@ description: (내부 참조 전용) XLSX export 골자·step 분해·수식 사�
 - **기존 TC (tc_id 동일 + 내용 무변경)**: 기존 result 값(`Pass`/`Fail`/`Block`/`N/A`) 그대로 유지.
 - **변경된 TC (tc_id 동일 + steps·expected 등 내용 변경)**: result를 `""`(빈 칸)으로 초기화. 내용이 바뀌었으므로 재수행 필요.
 - **신규 TC (tc_id 신규)**: result `""` (초기 상태).
-- **삭제된 TC (구 JSON에만 있는 tc_id)**: 시트에서 해당 행 제거.
+- **삭제된 TC (구 JSON에만 있는 tc_id)**: 시트 행을 유지하고 result를 `N/A`로 설정. 명세 변경·제거 이력 보존.
 
 ### 절차
 1. **result 스냅샷 추출** — 기존 `outputs/sheets/{appname}.xlsx`에서 각 탭의 `tc_id → result` 매핑을 읽어 메모리에 보관.
@@ -72,6 +72,7 @@ description: (내부 참조 전용) XLSX export 골자·step 분해·수식 사�
    - 스냅샷에 있고 + 내용 동일 → 스냅샷 result 복원
    - 스냅샷에 있고 + 내용 변경 → `""` (초기화)
    - 스냅샷에 없음 → `""` (신규)
+   - 새 JSON에 없음 (삭제된 TC) → `N/A` 유지 (tc_data가 사이드카에 있을 때만 복원)
 4. **워크북 재생성** — `python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>` 실행. 병합된 result가 K 컬럼에 반영되어야 함.
 5. **시트 검증** — 기존 워크플로우 3단계와 동일. 추가로 보존된 result 셀이 올바르게 복원됐는지 확인.
 6. **Google Drive 업로드** — 기존 워크플로우 5단계와 동일.

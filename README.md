@@ -148,7 +148,7 @@ outputs/
 | TC 내용이 바뀌지 않은 경우 | 기존 Pass / Fail / Block / N/A 그대로 유지 |
 | steps · expected 등 내용이 바뀐 경우 | 빈 칸으로 초기화 (재수행 필요) |
 | 새로 추가된 TC | 빈 칸 |
-| 삭제된 TC | 해당 행 제거 |
+| 삭제된 TC | 행 유지 + result를 `N/A`로 설정 (명세 변경·제거 이력 보존) |
 
 > 내용 변경 판정: `steps`, `expected`, `precondition`, `priority`, `risk_tags`, `title` 중 하나라도 다르면 초기화.  
 > 해시 사이드카: `outputs/sheets/{appname}_snapshot.json`에 자동 저장.

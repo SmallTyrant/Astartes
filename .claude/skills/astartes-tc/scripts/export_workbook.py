@@ -66,7 +66,6 @@ HEADER_FONT = Font(bold=True)
 WHITE_BOLD = Font(bold=True, color="FFFFFF")
 
 
-SNAPSHOT_COLS = {"TC ID": 0, "result": 9}  # B=0 offset → result is 10th col (B+9=K)
 CONTENT_FIELDS = ("title", "steps", "expected", "precondition", "priority", "risk_tags")
 
 
@@ -75,23 +74,29 @@ def _content_hash(tc: dict) -> str:
     return hashlib.sha256(json.dumps(payload, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
-def extract_result_snapshot(xlsx_path: Path) -> dict[str, tuple[str, str]]:
-    """기존 XLSX에서 {tc_id: (result, content_hash)} 스냅샷을 추출한다.
+def extract_result_snapshot(xlsx_path: Path) -> dict[str, dict]:
+    """기존 사이드카 JSON에서 {tc_id: {result, content_hash, tc_data}} 스냅샷을 로드한다.
 
-    content_hash는 xlsx 옆 _snapshot.json에 저장된 값을 사용한다.
-    XLSX 자체에는 hash 컬럼이 없으므로 사이드카 파일이 원천.
+    신규 포맷: value가 dict → 그대로 반환.
+    구 포맷: value가 str(hash만) → XLSX에서 result를 보완해 반환 (tc_data=None, 삭제 TC 복원 불가).
     """
     if not xlsx_path.exists():
         return {}
     sidecar = xlsx_path.with_name(xlsx_path.stem + "_snapshot.json")
-    hash_map: dict[str, str] = {}
     if sidecar.exists():
         try:
-            hash_map = json.loads(sidecar.read_text(encoding="utf-8"))
+            raw = json.loads(sidecar.read_text(encoding="utf-8"))
+            if raw and isinstance(next(iter(raw.values())), dict):
+                return raw          # 신규 포맷 — 그대로 사용
+            # 구 포맷 (hash 문자열) — XLSX에서 result 보완 필요
+            hash_map: dict[str, str] = raw
         except Exception:
-            pass
+            hash_map = {}
+    else:
+        hash_map = {}
 
-    result_map: dict[str, tuple[str, str]] = {}
+    # XLSX에서 result 읽기 (구 포맷 호환 또는 사이드카 없는 경우)
+    result_map: dict[str, dict] = {}
     try:
         wb = load_workbook(xlsx_path, read_only=True, data_only=True)
         for ws in wb.worksheets:
@@ -104,23 +109,36 @@ def extract_result_snapshot(xlsx_path: Path) -> dict[str, tuple[str, str]]:
                     continue
                 tc_id = str(tc_id_val)
                 result = str(result_val) if result_val else ""
-                stored_hash = hash_map.get(tc_id, "")
-                result_map[tc_id] = (result, stored_hash)
+                result_map[tc_id] = {
+                    "result": result,
+                    "content_hash": hash_map.get(tc_id, ""),
+                    "tc_data": None,  # 구 포맷에서는 tc_data 없음 → 삭제 TC 복원 불가
+                }
         wb.close()
     except Exception as e:
         print(f"[export_workbook] 기존 XLSX 읽기 실패 (스냅샷 무시): {e}", file=sys.stderr)
     return result_map
 
 
-def merge_results(tcs: list[dict], snapshot: dict[str, tuple[str, str]]) -> list[dict]:
-    """TC 목록에 기존 result를 병합한다. 내용이 바뀐 TC는 result를 초기화."""
+def merge_results(tcs: list[dict], snapshot: dict[str, dict]) -> list[dict]:
+    """TC 목록에 기존 result를 병합한다.
+
+    - 내용 무변경 TC: result 복원
+    - 내용 변경 TC: result 초기화
+    - 삭제된 TC (snapshot에만 있음): result=N/A로 유지 (tc_data가 있을 때만)
+    """
     if not snapshot:
         return tcs
+
+    new_ids = {str(tc.get("tc_id", "")) for tc in tcs}
     merged = []
+
     for tc in tcs:
         tc_id = str(tc.get("tc_id", ""))
         if tc_id in snapshot:
-            old_result, old_hash = snapshot[tc_id]
+            snap = snapshot[tc_id]
+            old_result = snap.get("result", "")
+            old_hash = snap.get("content_hash", "")
             new_hash = _content_hash(tc)
             if old_hash == new_hash:
                 tc = {**tc, "result": old_result}
@@ -128,13 +146,30 @@ def merge_results(tcs: list[dict], snapshot: dict[str, tuple[str, str]]) -> list
                 tc = {**tc, "result": ""}
                 print(f"[export_workbook] {tc_id} 내용 변경 → result 초기화", file=sys.stderr)
         merged.append(tc)
+
+    # 삭제된 TC → N/A 유지 (tc_data가 저장된 경우에만 복원 가능)
+    for tc_id, snap in snapshot.items():
+        if tc_id not in new_ids:
+            tc_data = snap.get("tc_data")
+            if tc_data:
+                restored = {**tc_data, "result": "N/A"}
+                merged.append(restored)
+                print(f"[export_workbook] {tc_id} 명세에서 삭제됨 → N/A 유지", file=sys.stderr)
+
     return merged
 
 
 def save_snapshot(xlsx_path: Path, all_tcs: list[dict]) -> None:
-    """tc_id → content_hash 사이드카 JSON을 저장한다."""
+    """tc_id → {content_hash, result, tc_data} 사이드카 JSON을 저장한다."""
     sidecar = xlsx_path.with_name(xlsx_path.stem + "_snapshot.json")
-    data = {str(tc.get("tc_id", "")): _content_hash(tc) for tc in all_tcs}
+    data = {
+        str(tc.get("tc_id", "")): {
+            "content_hash": _content_hash(tc),
+            "result": tc.get("result", ""),
+            "tc_data": tc,
+        }
+        for tc in all_tcs
+    }
     sidecar.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
