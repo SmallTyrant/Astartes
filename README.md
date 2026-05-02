@@ -7,7 +7,7 @@ Figma · PDF · Notion · Slack · PRD/API 스펙으로부터 iOS / Android / We
 ```
 입력           →  하네스 + 스킬     →  산출물
 ─────────────────────────────────────────────────────────────────
-Figma URL          /gen-tc           outputs/testcases/{screen}_{platform}.json
+Figma URL          /astartes-tc      outputs/testcases/{screen}_{platform}.json
 PDF                /astartes-tc:astartes-tc
                                      outputs/sheets/{appname}.xlsx  ← 단일 워크북
 Notion 페이지                         outputs/{ios,android,web}/  (자동화 코드)
@@ -95,7 +95,6 @@ export SLACK_TOKEN=...   # Slack URL 사용 시
 | `/astartes-doctor [--force] [--browsers] [--check]` | 의존성 점검·설치·자동 수복 |
 | `/astartes-tc` | 기존 TC JSON → XLSX export + Drive 업로드 (재생성 없음) |
 | `/astartes-tc gen-tc [url/path ...] [platforms]` | 소스 자동 감지 → TC 생성 → XLSX export → Drive 업로드 |
-| `/gen-tc` | ⚠️ deprecated → `/astartes-tc gen-tc` 사용 |
 
 **소스 자동 감지**: URL/경로를 나열하면 타입을 자동 판별한다. `figma.com` → figma, `slack.com` → slack, `.pdf` → pdf, `notion.so` → notion. 인자 없으면 `local`(로컬 드롭 스캔) 기본.
 
@@ -270,7 +269,7 @@ JSON 내부 전용(시트 export 시 제외): `requirement_id`, `source_refs[]`,
 │   │   └── plugin.json      # plugin manifest (astartes-tc)
 │   ├── settings.json        # 권한 / 훅
 │   ├── agents/              # 13 서브 에이전트
-│   ├── commands/            # /setup, /gen-tc
+│   ├── commands/            # /astartes-tc, /astartes-doctor
 │   ├── hooks/               # mask_pii, validate_tc_schema, check_*
 │   └── skills/
 │       └── astartes-tc/     # ← TC 시트 작성 스킬
