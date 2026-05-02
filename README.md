@@ -132,14 +132,11 @@ outputs/
 
 ### 샘플 출력물
 
-GoodNotes App Store 명세를 입력으로 생성한 실제 출력물 예시입니다.
+GoodNotes App Store 명세를 입력으로 `/astartes-tc` 한 줄 실행 시 생성되는 TC 시트 예시입니다.
 
-| 파일 | 내용 |
-|------|------|
-| [goodnotes-sample.xlsx](https://github.com/SmallTyrant/Astartes/releases/latest/download/goodnotes-sample.xlsx) | TC 시트 — summury + 화면별 탭 |
-| [tc-sample.json](https://github.com/SmallTyrant/Astartes/releases/latest/download/tc-sample.json) | TC JSON (v3 스키마) |
+![sample-preview](docs/images/sample-preview.svg)
 
-> `/astartes-tc` 한 줄로 생성된 결과입니다. 입력: [GoodNotes App Store 페이지](https://apps.apple.com/us/app/goodnotes-ai-notes-docs-pdf/id1444383602)
+> 입력: [GoodNotes App Store 페이지](https://apps.apple.com/us/app/goodnotes-ai-notes-docs-pdf/id1444383602) · 다운로드: [goodnotes-sample.xlsx](https://github.com/SmallTyrant/Astartes/releases/latest/download/goodnotes-sample.xlsx) · [tc-sample.json](https://github.com/SmallTyrant/Astartes/releases/latest/download/tc-sample.json)
 
 ### 시트 규칙 (변경 불가)
 

@@ -1,0 +1,171 @@
+<svg width="960" height="420" viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <linearGradient id="fadeBottom2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0"/>
+      <stop offset="100%" stop-color="white" stop-opacity="1"/>
+    </linearGradient>
+    <clipPath id="tableClip">
+      <rect x="0" y="36" width="960" height="300"/>
+    </clipPath>
+  </defs>
+
+  <!-- Window chrome -->
+  <rect width="960" height="420" fill="#E2E8F0" rx="12"/>
+  <rect width="960" height="36" fill="#CBD5E1" rx="12"/>
+  <rect y="24" width="960" height="12" fill="#CBD5E1"/>
+  <circle cx="22" cy="18" r="6" fill="#EF4444"/>
+  <circle cx="44" cy="18" r="6" fill="#F59E0B"/>
+  <circle cx="66" cy="18" r="6" fill="#10B981"/>
+  <text x="480" y="23" text-anchor="middle" font-size="12" fill="#64748B" font-weight="500">goodnotes.xlsx — GoodNotes TC 샘플 출력물</text>
+
+  <!-- Spreadsheet body -->
+  <rect x="0" y="36" width="960" height="340" fill="white"/>
+
+  <!-- Row 1: empty -->
+  <rect x="0" y="36" width="960" height="22" fill="#FAFAFA"/>
+  <text x="20" y="52" font-size="9" fill="#D1D5DB">1</text>
+
+  <!-- Row 2: Header -->
+  <rect x="0" y="58" width="960" height="26" fill="#B6D7A8"/>
+  <text x="20" y="75" font-size="9" fill="#6B7280">2</text>
+  <text x="68"  y="75" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700">TC ID</text>
+  <text x="130" y="75" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700">priority</text>
+  <text x="222" y="75" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700">1 Step</text>
+  <text x="338" y="75" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700">2 Step</text>
+  <text x="446" y="75" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700">3 Step</text>
+  <text x="548" y="75" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700">pre-condition</text>
+  <text x="690" y="75" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700">기대결과</text>
+  <text x="812" y="75" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700">result</text>
+  <text x="900" y="75" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700">비고</text>
+
+  <!-- Row 3: high (red) — TC-001 노트편집 -->
+  <rect x="0"   y="84" width="960" height="28" fill="white"/>
+  <rect x="96"  y="85" width="68"  height="26" fill="#E06666"/>
+  <text x="20"  y="102" font-size="9" fill="#D1D5DB">3</text>
+  <text x="68"  y="102" text-anchor="middle" font-size="9" fill="#374151">TC-001</text>
+  <text x="130" y="102" text-anchor="middle" font-size="9" fill="white" font-weight="700">high</text>
+  <text x="222" y="102" text-anchor="middle" font-size="9" fill="#374151">텍스트 입력 필드를 탭한다</text>
+  <text x="338" y="102" text-anchor="middle" font-size="9" fill="#374151">키보드로 텍스트를 입력한다</text>
+  <text x="446" y="102" text-anchor="middle" font-size="9" fill="#374151">AI 요약 버튼을 탭한다</text>
+  <text x="548" y="102" text-anchor="middle" font-size="9" fill="#374151">앱 설치 및 로그인 완료</text>
+  <text x="690" y="102" text-anchor="middle" font-size="9" fill="#374151">AI 요약 결과 패널이 표시되어야 한다</text>
+  <rect x="782" y="87" width="58" height="22" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+  <text x="811" y="102" text-anchor="middle" font-size="9" fill="#9CA3AF">— ▾</text>
+
+  <!-- Row 4: high (red) — TC-002 보안 -->
+  <rect x="0"   y="112" width="960" height="28" fill="#FAFAFA"/>
+  <rect x="96"  y="113" width="68"  height="26" fill="#E06666"/>
+  <text x="20"  y="130" font-size="9" fill="#D1D5DB">4</text>
+  <text x="68"  y="130" text-anchor="middle" font-size="9" fill="#374151">TC-002</text>
+  <text x="130" y="130" text-anchor="middle" font-size="9" fill="white" font-weight="700">high</text>
+  <text x="222" y="130" text-anchor="middle" font-size="9" fill="#374151">앱을 백그라운드로 전환한다</text>
+  <text x="338" y="130" text-anchor="middle" font-size="9" fill="#374151">5분 후 앱을 포그라운드로 복귀한다</text>
+  <text x="446" y="130" text-anchor="middle" font-size="9" fill="#9CA3AF">—</text>
+  <text x="548" y="130" text-anchor="middle" font-size="9" fill="#374151">Face ID 잠금 설정 완료</text>
+  <text x="690" y="130" text-anchor="middle" font-size="9" fill="#374151">Face ID 인증 화면이 표시되어야 한다</text>
+  <rect x="782" y="115" width="58" height="22" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+  <text x="811" y="130" text-anchor="middle" font-size="9" fill="#9CA3AF">— ▾</text>
+
+  <!-- Row 5: mid (yellow) — TC-003 -->
+  <rect x="0"   y="140" width="960" height="28" fill="white"/>
+  <rect x="96"  y="141" width="68"  height="26" fill="#FFD966"/>
+  <text x="20"  y="158" font-size="9" fill="#D1D5DB">5</text>
+  <text x="68"  y="158" text-anchor="middle" font-size="9" fill="#374151">TC-003</text>
+  <text x="130" y="158" text-anchor="middle" font-size="9" fill="#374151" font-weight="700">mid</text>
+  <text x="222" y="158" text-anchor="middle" font-size="9" fill="#374151">'+' 버튼을 탭한다</text>
+  <text x="338" y="158" text-anchor="middle" font-size="9" fill="#374151">'새 노트' 옵션을 탭한다</text>
+  <text x="446" y="158" text-anchor="middle" font-size="9" fill="#374151">템플릿을 선택한다</text>
+  <text x="548" y="158" text-anchor="middle" font-size="9" fill="#374151">라이브러리 화면 진입</text>
+  <text x="690" y="158" text-anchor="middle" font-size="9" fill="#374151">선택한 템플릿으로 노트가 생성되어야 한다</text>
+  <rect x="782" y="143" width="58" height="22" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+  <text x="811" y="158" text-anchor="middle" font-size="9" fill="#9CA3AF">— ▾</text>
+
+  <!-- Row 6: mid (yellow) — TC-004 화이트보드 -->
+  <rect x="0"   y="168" width="960" height="28" fill="#FAFAFA"/>
+  <rect x="96"  y="169" width="68"  height="26" fill="#FFD966"/>
+  <text x="20"  y="186" font-size="9" fill="#D1D5DB">6</text>
+  <text x="68"  y="186" text-anchor="middle" font-size="9" fill="#374151">TC-004</text>
+  <text x="130" y="186" text-anchor="middle" font-size="9" fill="#374151" font-weight="700">mid</text>
+  <text x="222" y="186" text-anchor="middle" font-size="9" fill="#374151">화이트보드 탭을 탭한다</text>
+  <text x="338" y="186" text-anchor="middle" font-size="9" fill="#374151">캔버스에서 두 손가락으로 확대한다</text>
+  <text x="446" y="186" text-anchor="middle" font-size="9" fill="#374151">다이어그램 도구를 탭한다</text>
+  <text x="548" y="186" text-anchor="middle" font-size="9" fill="#374151">무한 캔버스 모드 진입</text>
+  <text x="690" y="186" text-anchor="middle" font-size="9" fill="#374151">다이어그램 도구 팔레트가 표시되어야 한다</text>
+  <rect x="782" y="171" width="58" height="22" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+  <text x="811" y="186" text-anchor="middle" font-size="9" fill="#9CA3AF">— ▾</text>
+
+  <!-- Row 7: low (green) — TC-005 학습도구 -->
+  <rect x="0"   y="196" width="960" height="28" fill="white"/>
+  <rect x="96"  y="197" width="68"  height="26" fill="#93C47D"/>
+  <text x="20"  y="214" font-size="9" fill="#D1D5DB">7</text>
+  <text x="68"  y="214" text-anchor="middle" font-size="9" fill="#374151">TC-005</text>
+  <text x="130" y="214" text-anchor="middle" font-size="9" fill="white" font-weight="700">low</text>
+  <text x="222" y="214" text-anchor="middle" font-size="9" fill="#374151">학습도구 탭을 탭한다</text>
+  <text x="338" y="214" text-anchor="middle" font-size="9" fill="#374151">'플래시카드 생성' 버튼을 탭한다</text>
+  <text x="446" y="214" text-anchor="middle" font-size="9" fill="#374151">단어와 정의를 입력한다</text>
+  <text x="548" y="214" text-anchor="middle" font-size="9" fill="#374151">Study Sets 기능 활성화</text>
+  <text x="690" y="214" text-anchor="middle" font-size="9" fill="#374151">플래시카드가 목록에 추가되어야 한다</text>
+  <rect x="782" y="199" width="58" height="22" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+  <text x="811" y="214" text-anchor="middle" font-size="9" fill="#9CA3AF">— ▾</text>
+
+  <!-- Faded rows -->
+  <rect x="0" y="224" width="960" height="28" fill="#FAFAFA"/>
+  <rect x="0" y="252" width="960" height="28" fill="white"/>
+  <rect x="0" y="280" width="960" height="56" fill="#FAFAFA"/>
+
+  <!-- Fade overlay -->
+  <rect x="0" y="224" width="960" height="112" fill="url(#fadeBottom2)"/>
+
+  <!-- Grid: horizontal -->
+  <line x1="0" x2="960" y1="58"  y2="58"  stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="0" x2="960" y1="84"  y2="84"  stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="0" x2="960" y1="112" y2="112" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="0" x2="960" y1="140" y2="140" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="0" x2="960" y1="168" y2="168" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="0" x2="960" y1="196" y2="196" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="0" x2="960" y1="224" y2="224" stroke="#E2E8F0" stroke-width="1"/>
+
+  <!-- Grid: vertical -->
+  <line x1="36"  y1="36" x2="36"  y2="340" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="96"  y1="36" x2="96"  y2="340" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="164" y1="36" x2="164" y2="340" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="280" y1="36" x2="280" y2="340" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="396" y1="36" x2="396" y2="340" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="500" y1="36" x2="500" y2="340" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="600" y1="36" x2="600" y2="340" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="776" y1="36" x2="776" y2="340" stroke="#E2E8F0" stroke-width="1"/>
+  <line x1="848" y1="36" x2="848" y2="340" stroke="#E2E8F0" stroke-width="1"/>
+
+  <!-- Sheet tabs -->
+  <rect x="0"   y="336" width="960" height="44" fill="#E2E8F0"/>
+  <rect x="8"   y="340" width="72"  height="28" rx="5" fill="white"   stroke="#CBD5E1" stroke-width="1"/>
+  <text x="44"  y="359" text-anchor="middle" font-size="10" fill="#374151" font-weight="600">summury</text>
+  <rect x="88"  y="340" width="104" height="28" rx="5" fill="#DBEAFE"  stroke="#93C5FD" stroke-width="1"/>
+  <text x="140" y="359" text-anchor="middle" font-size="10" fill="#1D4ED8" font-weight="600">노트편집_ios ▲</text>
+  <rect x="200" y="340" width="112" height="28" rx="5" fill="#F1F5F9"  stroke="#E2E8F0" stroke-width="1"/>
+  <text x="256" y="359" text-anchor="middle" font-size="10" fill="#9CA3AF">노트편집_and</text>
+  <rect x="320" y="340" width="112" height="28" rx="5" fill="#F1F5F9"  stroke="#E2E8F0" stroke-width="1"/>
+  <text x="376" y="359" text-anchor="middle" font-size="10" fill="#9CA3AF">노트편집_web</text>
+  <rect x="440" y="340" width="120" height="28" rx="5" fill="#F1F5F9"  stroke="#E2E8F0" stroke-width="1"/>
+  <text x="500" y="359" text-anchor="middle" font-size="10" fill="#9CA3AF">화이트보드_ios</text>
+  <rect x="568" y="340" width="104" height="28" rx="5" fill="#F1F5F9"  stroke="#E2E8F0" stroke-width="1"/>
+  <text x="620" y="359" text-anchor="middle" font-size="10" fill="#9CA3AF">PDF뷰어_ios</text>
+  <rect x="680" y="340" width="112" height="28" rx="5" fill="#F1F5F9"  stroke="#E2E8F0" stroke-width="1"/>
+  <text x="736" y="359" text-anchor="middle" font-size="10" fill="#9CA3AF">학습도구_ios</text>
+  <text x="808" y="359" font-size="10" fill="#9CA3AF">+ 11개 더...</text>
+
+  <!-- Stats bar -->
+  <rect x="0" y="380" width="960" height="40" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="20" y="405" font-size="11" fill="#374151" font-weight="600">총 38개 TC</text>
+  <rect x="110" y="390" width="10" height="10" rx="2" fill="#E06666"/>
+  <text x="126" y="402" font-size="10" fill="#374151">high 14개</text>
+  <rect x="210" y="390" width="10" height="10" rx="2" fill="#FFD966"/>
+  <text x="226" y="402" font-size="10" fill="#374151">mid 16개</text>
+  <rect x="310" y="390" width="10" height="10" rx="2" fill="#93C47D"/>
+  <text x="326" y="402" font-size="10" fill="#374151">low 8개</text>
+  <text x="430" y="402" font-size="10" fill="#9CA3AF">|</text>
+  <text x="445" y="402" font-size="10" fill="#374151">화면 6개</text>
+  <text x="520" y="402" font-size="10" fill="#9CA3AF">|</text>
+  <text x="535" y="402" font-size="10" fill="#374151">플랫폼 3개 (iOS · Android · Web)</text>
+  <text x="760" y="402" font-size="10" fill="#9CA3AF">입력: GoodNotes App Store 명세 · /astartes-tc 1회 실행</text>
+</svg>
