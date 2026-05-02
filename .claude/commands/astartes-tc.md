@@ -17,6 +17,13 @@ model: sonnet
 - **`--export-only`** → **[XLSX Export 모드]** 기존 `outputs/testcases/*.json`을 XLSX로 변환만 한다. 소스 재수집·TC 재생성 없음.
 - **그 외 (URL·경로·키워드·인자 없음)** → **[TC 생성 모드]** 소스 자동 감지 후 전체 파이프라인 실행. 인자 없으면 `local`(inputs/ 폴더 스캔) 기본.
 
+**`--spec-version <버전>`** 옵션: 어느 모드에서든 사용 가능. 파싱 후 `export_workbook.py` 호출 시 `--spec-version <버전>`으로 전달한다. 없으면 생략.
+
+```
+/astartes-tc --export-only --spec-version v1.2
+/astartes-tc https://figma.com/... --spec-version v2.0
+```
+
 ---
 
 ## [XLSX Export 모드] — --export-only
@@ -24,7 +31,7 @@ model: sonnet
 `outputs/testcases/*.json` → XLSX export만 수행:
 
 1. TC JSON v3 스키마 점검 (result `""`, steps 1~5, 단일 동작).
-2. `python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>` 실행 (기존 result 자동 보존).
+2. `python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname> [--spec-version <버전>]` 실행 (기존 result 자동 보존). `--spec-version`이 지정된 경우 그대로 전달.
 3. 시트 검증 (수식·드롭다운·result 빈 칸·priority 색).
 4. Google Drive 업로드 (`mcp__claude_ai_Google_Drive__create_file`).
 
@@ -96,29 +103,33 @@ model: sonnet
 
 5. **`tc-reviewer` judge 모드**: 통합 평가. 평균 4점 미만 reject. 고위험 risk_tag(auth/data/payment) 영역에 priority="high" TC가 0개면 강제 reject.
 
-6. **`tc-normalizer`**: 통과 TC 통합 → `outputs/intermediate/tc-reviewed.json` (탭 분리 전, v3 스키마).
+6. **정규화** (`Bash` 직접 실행): `python3 scripts/normalize_tc.py` 실행.
+   - 입력: `outputs/intermediate/tc-{functional,security,negative}.json`
+   - 출력: `outputs/intermediate/tc-reviewed.json`
+   - 실패 시 `tc-normalizer` 에이전트로 폴백.
 
-7. **`tc-platform-splitter`** (`target_platforms`): `tc-reviewed.json`을 (screen, platform) 탭으로 분기.
-   - 출력: `outputs/testcases/{screen-slug}_{and|ios|web}.json` 다수 (target_platforms에 포함된 플랫폼만).
-   - 각 파일 안에서 `tc_id` 1부터 연속 재부여.
+7. **탭 분기** (`Bash` 직접 실행): `python3 scripts/split_tc.py --target-platforms {target_platforms}` 실행.
+   - 출력: `outputs/testcases/{screen-slug}_{and|ios|web}.json` 다수.
+   - 실패 시 `tc-platform-splitter` 에이전트로 폴백.
 
-8. **시트 export (`astartes-tc` skill 위임)**: Skill `astartes-tc` 호출 → `python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>` 실행.
+8. **시트 export (`astartes-tc` skill 위임)**: Skill `astartes-tc` 호출 → `python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname> [--spec-version <버전>]` 실행.
+   - `--spec-version`이 `$ARGUMENTS`에 지정된 경우 그대로 전달.
    - 명세 변경 시 기존 result 자동 보존 (tc_id + content_hash 기반).
    - 입력: `outputs/testcases/*.json` / 출력: `outputs/sheets/{appname}.xlsx`.
    - 완료 후 Google Drive 업로드 (`mcp__claude_ai_Google_Drive__create_file`).
 
-9. **병렬 코드젠** (target_platforms에 따라):
-   - `ios` 포함 → `codegen-ios`
-   - `android` 포함 → `codegen-android`
-   - `web` 포함 → `codegen-web`
+9. **코드젠** (`codegen-multi` 에이전트): `target_platforms` 인자를 전달해 단일 에이전트로 처리.
+   - 입력: `outputs/testcases/*_{and|ios|web}.json`
+   - 출력: `outputs/{ios,android,web}/`
+   - `codegen-multi`가 없으면 `codegen-ios`/`codegen-android`/`codegen-web` 병렬 폴백.
 
 10. **`coverage-auditor`** (`iteration=1`): 추적성 검증.
     - 출력: `outputs/traceability.csv`, `outputs/intermediate/coverage-gaps.json`
 
-11. **디자인-루프 (max iter = 3)**:
+11. **디자인-루프 (max iter = 2)**:
     - a) `coverage-gaps.json` 읽기.
-    - b) `complete=true` → 루프 종료, 12로.
-    - c) `iteration >= 3` → 잔여 `uncovered_source_refs`에 placeholder TC + `needs_review: true` 부착 후 종료.
+    - b) `complete=true` **또는** `coverage_ratio >= 0.9` → 루프 종료, 12로.
+    - c) `iteration >= 2` → 잔여 `uncovered_source_refs`에 placeholder TC + `needs_review: true` 부착 후 종료.
     - d) 그 외: `tc-gen-*` gap만 재호출 → dedup → `tc-normalizer mode=merge` → splitter append → `astartes-tc` skill 재호출 → codegen 델타 → coverage-auditor 재실행.
     - e) 매 iter 종료 시 1줄 요약: `iter=N, coverage=X/Y (Z%), figma_gaps=K, complete=true|false`.
 

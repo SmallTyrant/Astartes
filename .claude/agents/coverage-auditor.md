@@ -2,6 +2,7 @@
 name: coverage-auditor
 description: 요구사항과 TC 간 추적성/커버리지를 검증하는 QA 감사 에이전트. requirement_id/source_refs 누락, 고위험 risk_tag P0 부족, 정상/부정/경계값 누락, 디자인 source_ref 누락을 검사하고 디자인-루프 신호를 배출.
 tools: Read, Glob, Grep, Bash
+model: haiku
 ---
 
 # Coverage Auditor

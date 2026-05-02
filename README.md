@@ -2,11 +2,11 @@
 
 ![](https://ac-o.namu.la/20241107sac/40aea85449c06d2d13d53db56e1e922bbedf64a03715f99f4dd1bda4b5e2bfeb.png?expires=1777696419&key=2z1DmJulnXqhYgscMFXBrA&type=orig)
 
-> 명세서를 넣으면 TC 시트와 자동화 코드가 나옵니다
+> 명세서를 넣으면 TC 시트와 자동화 코드 스켈레톤이 나옵니다
 
 ![overview](docs/images/overview.svg)
 
-Figma·PDF·Slack·Notion 명세서를 입력하면 iOS·Android·Web 3개 플랫폼의 **TC 시트(.xlsx)** 와 **자동화 코드**를 자동으로 만들어 줍니다.  
+Figma·PDF·Slack·Notion 명세서를 입력하면 iOS·Android·Web 3개 플랫폼의 **TC 시트(.xlsx)** 와 **자동화 코드 스켈레톤**을 자동으로 만들어 줍니다. 생성된 코드는 프로젝트에 통합 후 실행할 수 있습니다.  
 Claude Code 슬래시 명령어 한 줄로 실행됩니다. 도메인 무관 — 금융·커머스·헬스케어·에듀테크 모두 동작합니다.
 
 ---
@@ -103,7 +103,7 @@ flowchart TD
     D --> E["✅ 품질 평가\n4점 미만 또는 고위험 P0 없으면 reject"]
     E --> F["📋 정규화 + 플랫폼 분기\n(screen, platform) 탭별 JSON"]
     F --> G["📊 TC 시트\noutputs/sheets/*.xlsx"]
-    F --> H["💻 자동화 코드\niOS · Android · Web"]
+    F --> H["💻 자동화 코드 스켈레톤\niOS · Android · Web (통합 필요)"]
     G --> I{"커버리지 완료?"}
     H --> I
     I -- "❌ 미커버 source_ref 존재" --> D
@@ -124,9 +124,9 @@ outputs/
 │   └── {appname}.xlsx          # 단일 워크북 (summury + 탭들)
 ├── testcases/
 │   └── {screen}_{platform}.json
-├── ios/                         # XCUITest Swift 코드
-├── android/                     # Espresso Kotlin 코드
-├── web/                         # Playwright TypeScript 코드
+├── ios/                         # XCUITest Swift 스켈레톤 (프로젝트 통합 필요)
+├── android/                     # Espresso Kotlin 스켈레톤 (프로젝트 통합 필요)
+├── web/                         # Playwright TypeScript 스켈레톤 (프로젝트 통합 필요)
 └── traceability.csv             # 요구사항 ↔ TC 추적성
 ```
 
