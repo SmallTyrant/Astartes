@@ -66,7 +66,7 @@ pip install openpyxl
 
 ### 2. 입력 준비
 
-방식 A (링크): 토큰 환경변수 export 후 source-spec.
+방식 A (링크): API 토큰을 환경변수로 설정한 뒤 URL을 그대로 붙여넣는다.
 
 ```bash
 export FIGMA_TOKEN=...
@@ -74,26 +74,28 @@ export NOTION_TOKEN=...
 export SLACK_TOKEN=...
 ```
 
-방식 B (로컬 드롭): `inputs/{figma,notion,slack}/export/`와 `inputs/pdf/`에 파일 그대로 두기.
+방식 B (로컬 드롭): `inputs/{figma,notion,slack}/export/`와 `inputs/pdf/`에 파일을 직접 넣는다.
 
-방식 C (테스트): `tests/fixtures/sample-*` 가 이미 있어 토큰/드롭 없이 즉시 검증 가능.
+방식 C (테스트): 토큰·파일 없이 `tests/fixtures/sample-*` 픽스처로 즉시 검증 가능.
 
 상세는 [`inputs/README.md`](./inputs/README.md).
 
 ### 3. 실행
 
 ```
-/gen-tc <source-spec> [platforms]
+/astartes-tc gen-tc [url/path ...] [platforms]
 ```
+
+URL과 경로를 나열하면 소스 타입을 자동 감지한다. `figma.com` → Figma, `slack.com` → Slack, `.pdf` → PDF, `notion.so` → Notion.
 
 | 호출 | 의미 |
 |---|---|
-| `/gen-tc fixture-mode` | 픽스처로 3 플랫폼 모두 생성 (가장 빠른 검증) |
-| `/gen-tc local` | 로컬 드롭한 파일로 3 플랫폼 모두 생성 |
-| `/gen-tc local web` | 로컬 드롭으로 Web만 생성 |
-| `/gen-tc figma:URL,pdf:./inputs/pdf/x.pdf` | 링크 + PDF, 3 플랫폼 모두 |
-| `/gen-tc figma:URL,notion:URL ios,web` | 링크 입력, iOS+Web만 |
-| `/gen-tc local,figma:URL ios` | 로컬+링크 혼용, iOS만 |
+| `/astartes-tc gen-tc fixture-mode` | 픽스처로 3 플랫폼 모두 생성 (가장 빠른 검증) |
+| `/astartes-tc gen-tc` | 로컬 드롭한 파일로 3 플랫폼 모두 생성 |
+| `/astartes-tc gen-tc web` | 로컬 드롭으로 Web만 생성 |
+| `/astartes-tc gen-tc https://figma.com/... ./inputs/pdf/x.pdf` | Figma + PDF, 3 플랫폼 모두 |
+| `/astartes-tc gen-tc https://figma.com/... https://notion.so/... ios,web` | Figma + Notion, iOS+Web만 |
+| `/astartes-tc` | 기존 TC JSON → XLSX export만 (소스 재수집 없음) |
 
 `platforms` 인자 생략 시 `ios,android,web` 기본.
 
