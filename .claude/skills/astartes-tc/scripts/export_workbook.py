@@ -19,15 +19,18 @@
     - 마지막 행: 총 합계
 
 사용:
-  python3 .claude/skills/astartes-tc/scripts/export_workbook.py [앱명]
+  python3 .claude/skills/astartes-tc/scripts/export_workbook.py [앱명] [--spec-version v1.2]
   - 앱명 미지정 시 'app' 사용
+  - --spec-version: 명세서 버전 (지정 시 비고에 함께 기록)
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import re
 import sys
+from datetime import date
 from pathlib import Path
 
 from openpyxl import Workbook, load_workbook
@@ -120,12 +123,12 @@ def extract_result_snapshot(xlsx_path: Path) -> dict[str, dict]:
     return result_map
 
 
-def merge_results(tcs: list[dict], snapshot: dict[str, dict]) -> list[dict]:
+def merge_results(tcs: list[dict], snapshot: dict[str, dict], deletion_note: str = "명세 변경으로 삭제됨") -> list[dict]:
     """TC 목록에 기존 result를 병합한다.
 
     - 내용 무변경 TC: result 복원
     - 내용 변경 TC: result 초기화
-    - 삭제된 TC (snapshot에만 있음): result=N/A로 유지 (tc_data가 있을 때만)
+    - 삭제된 TC (snapshot에만 있음): result=N/A + 비고에 사유·날짜·버전 기록
     """
     if not snapshot:
         return tcs
@@ -152,7 +155,7 @@ def merge_results(tcs: list[dict], snapshot: dict[str, dict]) -> list[dict]:
         if tc_id not in new_ids:
             tc_data = snap.get("tc_data")
             if tc_data:
-                restored = {**tc_data, "result": "N/A", "note": "명세 변경으로 삭제됨"}
+                restored = {**tc_data, "result": "N/A", "note": deletion_note}
                 merged.append(restored)
                 print(f"[export_workbook] {tc_id} 명세에서 삭제됨 → N/A 유지", file=sys.stderr)
 
@@ -349,7 +352,14 @@ def add_summury_sheet(wb: Workbook, app_name: str, tab_data: list[tuple[str, int
 
 
 def main(argv: list[str]) -> int:
-    app_name = argv[1] if len(argv) > 1 else "app"
+    parser = argparse.ArgumentParser(description="TC JSON → XLSX 워크북")
+    parser.add_argument("app_name", nargs="?", default="app", help="앱 이름")
+    parser.add_argument("--spec-version", default="", help="명세서 버전 (예: v1.2)")
+    args = parser.parse_args(argv[1:])
+    app_name = args.app_name
+
+    today = date.today().strftime("%Y-%m-%d")
+    deletion_note = f"명세 변경으로 삭제됨 ({today}{', ' + args.spec_version if args.spec_version else ''})"
     if not SRC_DIR.exists():
         print(f"[export_workbook] {SRC_DIR} 없음", file=sys.stderr)
         return 1
@@ -375,7 +385,7 @@ def main(argv: list[str]) -> int:
     snapshot = extract_result_snapshot(out_path)
     if snapshot:
         print(f"[export_workbook] 기존 result 스냅샷 로드: {len(snapshot)}개 TC", file=sys.stderr)
-        all_tcs = merge_results(all_tcs, snapshot)
+        all_tcs = merge_results(all_tcs, snapshot, deletion_note=deletion_note)
 
     wb = Workbook()
     # 기본 시트 제거
