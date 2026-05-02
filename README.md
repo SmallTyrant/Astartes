@@ -102,23 +102,21 @@ export SLACK_TOKEN=...
 | 명령 | 역할 |
 |---|---|
 | `/setup [--force] [--browsers]` | 의존성 부트스트랩 (Python venv + npm + Playwright) |
-| `/gen-tc <source-spec> [platforms]` | 전체 파이프라인 실행 (10단계, 디자인-루프 포함) |
-| `/astartes-tc:astartes-tc` | TC JSON → 한국 QA 표준 XLSX 워크북 변환 (단독 호출 가능) |
+| `/astartes-tc` | 기존 TC JSON → XLSX export + Drive 업로드 (재생성 없음) |
+| `/astartes-tc gen-tc [url/path ...] [platforms]` | 소스 자동 감지 → TC 생성 → XLSX export → Drive 업로드 |
+| `/gen-tc` | ⚠️ deprecated → `/astartes-tc gen-tc` 사용 |
 
-`/gen-tc` 의 step 8 은 내부적으로 `astartes-tc` skill 을 호출한다. JSON 만 손으로 손봤다면 `/astartes-tc:astartes-tc` 단독 호출로 워크북만 다시 만들 수 있다.
-
-> **호출 형식 주의**: 이 skill 은 `astartes-tc` plugin 안에 들어 있어서 **반드시 `<plugin-name>:<skill-name>` 네임스페이스**로 호출해야 한다. `/astartes-tc` 또는 `/astartes` 단독은 동작하지 않는다 (Claude Code 공식 동작).
+**소스 자동 감지**: URL/경로를 나열하면 타입을 자동 판별한다. `figma.com` → figma, `slack.com` → slack, `.pdf` → pdf, `notion.so` → notion. 인자 없으면 `local`(로컬 드롭 스캔) 기본.
 
 ## astartes-tc 스킬 단독 사용
 
-다른 프로젝트에서도 이 skill 만 떼어 쓸 수 있다.
+다른 프로젝트에서도 XLSX export 부분만 떼어 쓸 수 있다.
 
-### 1. 호출 방법 (3가지)
+### 1. 호출 방법
 
 | 시점 | 호출 |
 | ---- | ---- |
-| Claude 가 자동 판단 | `outputs/testcases/*.json` 가 보이거나 사용자가 "시트로 뽑아줘" 같이 말하면 SKILL.md frontmatter 의 description 매칭으로 자동 invoke |
-| 사용자 명시 호출 | `/astartes-tc:astartes-tc` 입력 (plugin 네임스페이스 필수) |
+| 사용자 명시 호출 | `/astartes-tc` (인자 없음 → export 전용 모드) |
 | CLI 직접 호출 | `python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>` |
 
 ### 1-1. 명세 변경 시 동작 (result 보존)
@@ -179,7 +177,7 @@ cp -r .claude/skills/astartes-tc /path/to/other-project/.claude/skills/
 
 ### 6. skill 내부 문서
 
-- [`.claude/skills/astartes-tc/SKILL.md`](./.claude/skills/astartes-tc/SKILL.md) — frontmatter + 6개 본문 섹션 (언제 사용 / 골자 / Step 분해 / 워크플로우 / 금지 사항 / 참고)
+- [`.claude/skills/astartes-tc/INTERNAL.md`](./.claude/skills/astartes-tc/INTERNAL.md) — 골자 / Step 분해 / 워크플로우 / 금지 사항 사양 (내부 참조용)
 - [`.claude/skills/astartes-tc/references/sheet-layout.md`](./.claude/skills/astartes-tc/references/sheet-layout.md) — 셀 좌표·색상 hex·수식 패턴 전체 사양
 - [`.claude/skills/astartes-tc/references/step-decomposition.md`](./.claude/skills/astartes-tc/references/step-decomposition.md) — Step 분해 사례·어휘·5 step 한도 처리법
 - [`.claude/skills/astartes-tc/references/tc-schema-v3.md`](./.claude/skills/astartes-tc/references/tc-schema-v3.md) — TC JSON v3 스키마
