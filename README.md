@@ -13,28 +13,13 @@ Claude Code 슬래시 명령어 한 줄로 실행됩니다. 도메인 무관 —
 
 ## 설치
 
-### XLSX 스킬만 설치 (TC JSON → 시트 export만 필요한 경우)
-
 ```bash
-git clone https://github.com/SmallTyrant/Astartes.git /tmp/astartes
-cp -r /tmp/astartes/.claude/skills/astartes-tc ~/.claude/skills/
-pip install openpyxl
+curl -fsSL https://raw.githubusercontent.com/SmallTyrant/Astartes/main/scripts/install.sh | bash
 ```
 
-설치 후 어떤 프로젝트에서든 `/astartes-tc --export-only`를 사용할 수 있습니다.
+**Claude Code를 재시작**하면 `/astartes-tc`, `/astartes-doctor` 명령어를 바로 사용할 수 있습니다.
 
-### 전체 하네스 설치 (TC 자동생성 전체 파이프라인)
-
-```bash
-git clone https://github.com/SmallTyrant/Astartes.git
-cp -r Astartes/.claude/agents/* ~/.claude/agents/
-cp -r Astartes/.claude/commands/* ~/.claude/commands/
-cp -r Astartes/.claude/skills/* ~/.claude/skills/
-cp -r Astartes/.claude/hooks/* ~/.claude/hooks/
-pip install openpyxl
-```
-
-Claude Code를 재시작하면 에이전트·명령어가 전역으로 인식됩니다.
+> 수동 설치·업데이트·제거 방법: [INSTALL.md](./INSTALL.md)
 
 ---
 
