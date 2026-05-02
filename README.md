@@ -11,20 +11,38 @@ Claude Code 슬래시 명령어 한 줄로 실행됩니다. 도메인 무관 —
 
 ---
 
-## 시작하기 (5분)
+## 설치
 
-### 1단계 — 저장소 받기
+### XLSX 스킬만 설치 (TC JSON → 시트 export만 필요한 경우)
+
+```bash
+git clone https://github.com/SmallTyrant/Astartes.git /tmp/astartes
+cp -r /tmp/astartes/.claude/skills/astartes-tc ~/.claude/skills/
+pip install openpyxl
+```
+
+설치 후 어떤 프로젝트에서든 `/astartes-tc --export-only`를 사용할 수 있습니다.
+
+### 전체 하네스 설치 (TC 자동생성 전체 파이프라인)
 
 ```bash
 git clone https://github.com/SmallTyrant/Astartes.git
-cd Astartes
+cp -r Astartes/.claude/agents/* ~/.claude/agents/
+cp -r Astartes/.claude/commands/* ~/.claude/commands/
+cp -r Astartes/.claude/skills/* ~/.claude/skills/
+cp -r Astartes/.claude/hooks/* ~/.claude/hooks/
+pip install openpyxl
 ```
 
-Claude Code에서 이 폴더를 엽니다. 에이전트와 명령어가 자동으로 인식됩니다.
+Claude Code를 재시작하면 에이전트·명령어가 전역으로 인식됩니다.
 
-### 2단계 — 의존성 설치
+---
 
-Claude Code 채팅창에 입력:
+## 시작하기 (5분)
+
+### 1단계 — 의존성 설치
+
+설치 후 Claude Code 채팅창에 입력:
 
 ```
 /astartes-doctor
@@ -39,7 +57,7 @@ Python·openpyxl·Node·Playwright 등 필요한 의존성을 자동으로 점�
 | `/astartes-doctor --browsers` | Playwright 브라우저까지 설치 (~300MB) |
 | `/astartes-doctor --check` | 설치 상태만 확인 (변경 없음) |
 
-### 3단계 — TC 생성
+### 2단계 — TC 생성
 
 URL이나 파일 경로를 그대로 붙여넣으면 됩니다. 소스 타입은 자동 감지됩니다.
 
@@ -214,24 +232,6 @@ A. Drive MCP가 설정되지 않으면 자동으로 건너뜁니다. 로컬 파�
 
 ---
 
-## 다른 프로젝트에서 XLSX 스킬만 사용하기
-
-TC JSON이 있는 프로젝트에서 시트 생성 기능만 가져다 쓸 수 있습니다.
-
-```bash
-# 스킬 디렉토리 복사
-cp -r .claude/skills/astartes-tc /path/to/other-project/.claude/skills/
-
-# 의존성
-pip install openpyxl
-
-# 실행
-python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>
-```
-
-전역(`~/.claude/skills/`)에 두면 모든 프로젝트에서 호출 가능합니다.
-
----
 
 ## 참고 문서
 
