@@ -1,6 +1,6 @@
 ---
-name: astartes-tc
-description: TC JSON을 한국 QA 표준 포맷의 단일 XLSX 워크북(summury 시트 + (screen, platform) 탭들)으로 변환한다. 시트 작성 시 강제 규칙 — 1 버튼=1 step, result 컬럼 빈 칸, summury 통계는 명시적 행 범위 수식, 드롭다운은 데이터 행에만 — 을 적용한다. 사용 시점: TC를 새로 작성할 때, 기존 TC를 시트로 export할 때, #NAME? 등 시트 서식이 깨졌을 때, 또는 사용자가 "시트로 만들어줘"·"엑셀로 뽑아줘"라고 요청할 때.
+name: astartes-tc-export
+description: (내부 참조 전용) XLSX export 골자·step 분해·수식 사양. 사용자 진입점은 /astartes-tc 명령어.
 ---
 
 # Astartes TC Skill

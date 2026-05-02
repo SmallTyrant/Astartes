@@ -33,7 +33,7 @@
 ## TC 스키마 (시트 형식 통일, v3)
 
 전체 스키마·시트 컬럼 매핑·탭 분리 규칙·구 스키마 호환성은 `.claude/skills/astartes-tc/references/tc-schema-v3.md` 참조.
-시트 작성 자체의 골자(1 워크북/앱, 헤더 위치, priority 색, result 빈 칸, 명시적 행 범위 수식, 1 버튼=1 step)는 `astartes-tc` skill 이 강제한다.
+시트 작성 자체의 골자(1 워크북/앱, 헤더 위치, priority 색, result 빈 칸, 명시적 행 범위 수식, 1 버튼=1 step)는 `/astartes-tc` 명령어와 `.claude/skills/astartes-tc/INTERNAL.md` 사양이 강제한다.
 
 ## 자동화 코드 컨벤션
 - iOS: Page Object 패턴, XCTest + XCUITest. `outputs/ios/PageObjects/`에 화면별 PO 클래스. accessibility identifier로만 매칭.
