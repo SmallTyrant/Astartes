@@ -153,6 +153,21 @@ outputs/
 > 내용 변경 판정: `steps`, `expected`, `precondition`, `priority`, `risk_tags`, `title` 중 하나라도 다르면 초기화.  
 > 해시 사이드카: `outputs/sheets/{appname}_snapshot.json`에 자동 저장.
 
+**삭제된 TC 비고 형식** (M열):
+
+```
+명세 변경으로 삭제됨 (2026-05-02)          ← 버전 미지정
+명세 변경으로 삭제됨 (2026-05-02, v1.2)   ← 버전 지정 시
+```
+
+명세 버전을 기록하려면 export 시 `--spec-version` 옵션을 전달합니다:
+
+```bash
+python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname> --spec-version v1.2
+```
+
+`/astartes-tc --export-only` 사용 시에는 파이프라인이 자동으로 호출하므로 별도 옵션 불필요. 버전 정보는 명세 소스에서 감지되면 자동 삽입됩니다.
+
 ---
 
 ## 로컬 파일로 사용하기
