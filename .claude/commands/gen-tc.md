@@ -1,5 +1,5 @@
 ---
-description: 디자인/문서 입력으로부터 시트 형식 TC 풀세트 생성 (수집→분석→중복검사→생성→정규화→탭분리→시트export→코드젠→감사→디자인루프)
+description: "[deprecated → /astartes-tc 사용] 디자인/문서 입력으로부터 시트 형식 TC 풀세트 생성"
 argument-hint: <source-spec> [platforms]
 allowed-tools: Read, Glob, Grep, Bash(git diff:*), Bash(ls:*), Bash(python3 scripts/fetch_figma.py:*), Bash(python3 scripts/fetch_notion.py:*), Bash(python3 scripts/fetch_slack.py:*), Bash(python3 scripts/parse_pdf.py:*), Bash(python3 .claude/skills/astartes-tc/scripts/export_workbook.py:*), Bash(npx:*)
 model: sonnet
