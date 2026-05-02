@@ -24,12 +24,13 @@
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import sys
 from pathlib import Path
 
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
@@ -63,6 +64,78 @@ CENTER = Alignment(horizontal="center", vertical="center", wrap_text=True)
 LEFT_WRAP = Alignment(horizontal="left", vertical="center", wrap_text=True)
 HEADER_FONT = Font(bold=True)
 WHITE_BOLD = Font(bold=True, color="FFFFFF")
+
+
+SNAPSHOT_COLS = {"TC ID": 0, "result": 9}  # B=0 offset → result is 10th col (B+9=K)
+CONTENT_FIELDS = ("title", "steps", "expected", "precondition", "priority", "risk_tags")
+
+
+def _content_hash(tc: dict) -> str:
+    payload = {f: tc.get(f) for f in CONTENT_FIELDS}
+    return hashlib.sha256(json.dumps(payload, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+
+
+def extract_result_snapshot(xlsx_path: Path) -> dict[str, tuple[str, str]]:
+    """기존 XLSX에서 {tc_id: (result, content_hash)} 스냅샷을 추출한다.
+
+    content_hash는 xlsx 옆 _snapshot.json에 저장된 값을 사용한다.
+    XLSX 자체에는 hash 컬럼이 없으므로 사이드카 파일이 원천.
+    """
+    if not xlsx_path.exists():
+        return {}
+    sidecar = xlsx_path.with_name(xlsx_path.stem + "_snapshot.json")
+    hash_map: dict[str, str] = {}
+    if sidecar.exists():
+        try:
+            hash_map = json.loads(sidecar.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+
+    result_map: dict[str, tuple[str, str]] = {}
+    try:
+        wb = load_workbook(xlsx_path, read_only=True, data_only=True)
+        for ws in wb.worksheets:
+            if ws.title == "summury":
+                continue
+            for row in ws.iter_rows(min_row=DATA_START_ROW, values_only=True):
+                tc_id_val = row[HEADER_START_COL - 1] if len(row) >= HEADER_START_COL else None
+                result_val = row[HEADER_START_COL - 1 + 9] if len(row) >= HEADER_START_COL + 9 else None
+                if tc_id_val is None:
+                    continue
+                tc_id = str(tc_id_val)
+                result = str(result_val) if result_val else ""
+                stored_hash = hash_map.get(tc_id, "")
+                result_map[tc_id] = (result, stored_hash)
+        wb.close()
+    except Exception as e:
+        print(f"[export_workbook] 기존 XLSX 읽기 실패 (스냅샷 무시): {e}", file=sys.stderr)
+    return result_map
+
+
+def merge_results(tcs: list[dict], snapshot: dict[str, tuple[str, str]]) -> list[dict]:
+    """TC 목록에 기존 result를 병합한다. 내용이 바뀐 TC는 result를 초기화."""
+    if not snapshot:
+        return tcs
+    merged = []
+    for tc in tcs:
+        tc_id = str(tc.get("tc_id", ""))
+        if tc_id in snapshot:
+            old_result, old_hash = snapshot[tc_id]
+            new_hash = _content_hash(tc)
+            if old_hash == new_hash:
+                tc = {**tc, "result": old_result}
+            else:
+                tc = {**tc, "result": ""}
+                print(f"[export_workbook] {tc_id} 내용 변경 → result 초기화", file=sys.stderr)
+        merged.append(tc)
+    return merged
+
+
+def save_snapshot(xlsx_path: Path, all_tcs: list[dict]) -> None:
+    """tc_id → content_hash 사이드카 JSON을 저장한다."""
+    sidecar = xlsx_path.with_name(xlsx_path.stem + "_snapshot.json")
+    data = {str(tc.get("tc_id", "")): _content_hash(tc) for tc in all_tcs}
+    sidecar.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def load_json(path: Path) -> list[dict]:
@@ -262,6 +335,12 @@ def main(argv: list[str]) -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out_path = OUT_DIR / f"{app_name}.xlsx"
 
+    # 기존 XLSX에서 result 스냅샷 추출 (명세 변경 시 result 보존/초기화 판별)
+    snapshot = extract_result_snapshot(out_path)
+    if snapshot:
+        print(f"[export_workbook] 기존 result 스냅샷 로드: {len(snapshot)}개 TC", file=sys.stderr)
+        all_tcs = merge_results(all_tcs, snapshot)
+
     wb = Workbook()
     # 기본 시트 제거
     default = wb.active
@@ -278,6 +357,7 @@ def main(argv: list[str]) -> int:
     add_summury_sheet(wb, app_name, tab_data)
 
     wb.save(out_path)
+    save_snapshot(out_path, all_tcs)
     rel = out_path.relative_to(ROOT)
     total = sum(len(v) for v in groups.values())
     print(f"[export_workbook] wrote {rel}  ({len(tab_data)} sheets, {total} TC)")

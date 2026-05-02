@@ -27,3 +27,4 @@ __pycache__/
 .venv/
 .claude/.bootstrap_done
 outputs/web/package-lock.json
+.omc/state/

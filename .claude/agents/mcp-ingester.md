@@ -27,6 +27,11 @@ figma:https://www.figma.com/file/ABCD,notion:https://www.notion.so/xxx,slack:htt
    1. **MCP 서버 우선**: `ToolSearch` 또는 사용 가능한 도구 목록에 `mcp__*figma*`, `mcp__*notion*`, `mcp__*slack*` 패턴이 있으면 해당 도구로 페치.
    2. **fetcher 폴백**: MCP 미등록이면 `Bash(python3 scripts/fetch_<type>.py <value>)` 실행. 환경변수(FIGMA_TOKEN/NOTION_TOKEN/SLACK_TOKEN)는 사용자 셸 환경에서 주입.
    3. **PDF**: 항상 `Bash(python3 scripts/parse_pdf.py <path>)`.
+
+   **댓글·리플라이 추가 수집** (각 소스 페치 직후 이어서 실행):
+   - **Figma**: 프레임 페치 후 `GET /v1/files/{file_key}/comments` 로 파일 전체 댓글을 추가 수집. MCP가 comments 엔드포인트를 지원하면 MCP 우선, 없으면 `Bash(python3 scripts/fetch_figma.py <value> --comments)`. 결과는 `normalized.comments: [{id, message, author, resolved, anchor_node_id}]` 로 병합.
+   - **Slack**: 채널 메시지 페치 후 각 메시지의 `thread_ts`가 있으면 스레드 리플라이도 수집(`conversations.replies`). 리플라이는 `normalized.threads: [{parent_ts, replies:[{ts, user, text}]}]` 로 병합. MCP 지원 시 MCP 우선.
+   - **PDF**: `parse_pdf.py`가 어노테이션(주석/하이라이트)을 추출하도록 `--annotations` 플래그 전달. 결과는 `normalized.annotations: [{page, content, author}]` 로 병합. 스크립트가 플래그 미지원이면 skip 후 stderr 경고.
 3. fixture-mode인 경우: `tests/fixtures/sample-{figma,notion,slack}.json`을 `inputs/{type}/raw/` 로 복사. PDF는 `tests/fixtures/sample-pdf.txt`를 `inputs/pdf/raw/sample.json`으로 래핑.
 
 3-bis. local 토큰인 경우 (스캔 → 정규화 복사):

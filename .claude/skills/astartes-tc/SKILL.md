@@ -46,6 +46,38 @@ description: TC JSON을 한국 QA 표준 포맷의 단일 XLSX 워크북(summury
    - priority 셀에 조건부 서식 색이 입혀졌는가
    - summury 환경 블록(R4~R7)·총 합계(R19) 자리가 채워졌는가
 4. **재실행** — JSON을 고쳤다면 export를 다시 돌린다. export는 idempotent이므로 안전.
+5. **Google Drive 업로드** — 검증 통과 후 `mcp__claude_ai_Google_Drive__create_file`로 `outputs/sheets/{appname}.xlsx`를 Drive에 업로드한다.
+   - 첫 실행이거나 인증이 필요하면 `mcp__claude_ai_Google_Drive__authenticate`로 먼저 인증한다.
+   - 업로드 성공 시 반환된 파일 URL을 출력해 사용자가 바로 열 수 있게 한다.
+   - 같은 이름의 파일이 Drive에 이미 있으면 덮어쓰지 않고 사용자에게 확인한 뒤 업로드한다.
+
+## 명세 변경 시 워크플로우 (기존 시트 유지)
+
+명세서가 바뀌어 TC JSON이 갱신된 경우, 기존 시트의 수행 결과(result)를 최대한 보존한다.
+
+### 원칙
+- **기존 TC (tc_id 동일 + 내용 무변경)**: 기존 result 값(`Pass`/`Fail`/`Block`/`N/A`) 그대로 유지.
+- **변경된 TC (tc_id 동일 + steps·expected 등 내용 변경)**: result를 `""`(빈 칸)으로 초기화. 내용이 바뀌었으므로 재수행 필요.
+- **신규 TC (tc_id 신규)**: result `""` (초기 상태).
+- **삭제된 TC (구 JSON에만 있는 tc_id)**: 시트에서 해당 행 제거.
+
+### 절차
+1. **result 스냅샷 추출** — 기존 `outputs/sheets/{appname}.xlsx`에서 각 탭의 `tc_id → result` 매핑을 읽어 메모리에 보관.
+   ```python
+   # 예시
+   snapshot = {"TC-001": "Pass", "TC-002": "Fail", "TC-003": ""}
+   ```
+2. **신규 TC JSON 점검** — 갱신된 `outputs/testcases/*.json`이 v3 스키마를 준수하는지 확인. `result`는 모두 `""`이어야 함 (JSON 단계에서는 result를 채우지 않음).
+3. **result 병합** — export 직전, 각 TC의 `tc_id`를 스냅샷과 대조해 result를 결정:
+   - 스냅샷에 있고 + 내용 동일 → 스냅샷 result 복원
+   - 스냅샷에 있고 + 내용 변경 → `""` (초기화)
+   - 스냅샷에 없음 → `""` (신규)
+4. **워크북 재생성** — `python3 .claude/skills/astartes-tc/scripts/export_workbook.py <appname>` 실행. 병합된 result가 K 컬럼에 반영되어야 함.
+5. **시트 검증** — 기존 워크플로우 3단계와 동일. 추가로 보존된 result 셀이 올바르게 복원됐는지 확인.
+6. **Google Drive 업로드** — 기존 워크플로우 5단계와 동일.
+
+### 내용 변경 판정 기준
+`steps`, `expected`, `precondition`, `priority`, `risk_tags` 중 하나라도 다르면 "내용 변경"으로 간주해 result를 초기화한다. `title`만 바뀐 경우도 초기화한다.
 
 ## 금지 사항
 
