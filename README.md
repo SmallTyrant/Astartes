@@ -132,7 +132,7 @@ outputs/
 | 항목 | 규칙 |
 |---|---|
 | 파일 수 | 앱당 1개. 화면별 분리 금지 |
-| 레이아웃 | Row 1 비움 / Row 2 헤더(연두 #B6D7A8) / Row 3+ 데이터 |
+| 레이아웃 | Row 1 비움 / Row 2 헤더(연두 #B6D7A8, B~M) / Row 3+ 데이터 |
 | priority 색 | `high` 빨강 · `mid` 노랑 · `low` 초록 |
 | result | 드롭다운 (Pass/Fail/Block/N/A). **기본값은 빈 칸** — QA가 실행 후 채움 |
 | summury 수식 | `=COUNTA`, `=COUNTIF` 명시적 행 번호 사용. open-ended 범위 금지 |
@@ -148,7 +148,7 @@ outputs/
 | TC 내용이 바뀌지 않은 경우 | 기존 Pass / Fail / Block / N/A 그대로 유지 |
 | steps · expected 등 내용이 바뀐 경우 | 빈 칸으로 초기화 (재수행 필요) |
 | 새로 추가된 TC | 빈 칸 |
-| 삭제된 TC | 행 유지 + result를 `N/A`로 설정 (명세 변경·제거 이력 보존) |
+| 삭제된 TC | 행 유지 + result `N/A` + 비고에 `"명세 변경으로 삭제됨"` 기록 |
 
 > 내용 변경 판정: `steps`, `expected`, `precondition`, `priority`, `risk_tags`, `title` 중 하나라도 다르면 초기화.  
 > 해시 사이드카: `outputs/sheets/{appname}_snapshot.json`에 자동 저장.

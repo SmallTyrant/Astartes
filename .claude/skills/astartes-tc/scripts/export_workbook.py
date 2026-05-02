@@ -47,7 +47,7 @@ ALLOWED_PLATFORM = {"and", "ios", "web"}
 TC_HEADER = [
     "TC ID", "priority",
     "1 Step", "2 Step", "3 Step", "4 Step", "5 Step",
-    "pre-condition", "기대결과", "result", "Jira ticket",
+    "pre-condition", "기대결과", "result", "Jira ticket", "비고",
 ]
 HEADER_START_COL = 2   # B
 HEADER_ROW = 2
@@ -152,7 +152,7 @@ def merge_results(tcs: list[dict], snapshot: dict[str, dict]) -> list[dict]:
         if tc_id not in new_ids:
             tc_data = snap.get("tc_data")
             if tc_data:
-                restored = {**tc_data, "result": "N/A"}
+                restored = {**tc_data, "result": "N/A", "note": "명세 변경으로 삭제됨"}
                 merged.append(restored)
                 print(f"[export_workbook] {tc_id} 명세에서 삭제됨 → N/A 유지", file=sys.stderr)
 
@@ -207,7 +207,7 @@ def add_tc_sheet(wb: Workbook, sheet_name: str, tcs: list[dict]) -> None:
     ws = wb.create_sheet(title=sheet_name[:31])  # excel 시트명 31자 제한
 
     # 컬럼 너비
-    widths = {1: 3, 2: 7, 3: 11, 4: 28, 5: 28, 6: 28, 7: 28, 8: 28, 9: 24, 10: 32, 11: 9, 12: 14}
+    widths = {1: 3, 2: 7, 3: 11, 4: 28, 5: 28, 6: 28, 7: 28, 8: 28, 9: 24, 10: 32, 11: 9, 12: 14, 13: 30}
     for col, w in widths.items():
         ws.column_dimensions[get_column_letter(col)].width = w
 
@@ -231,6 +231,7 @@ def add_tc_sheet(wb: Workbook, sheet_name: str, tcs: list[dict]) -> None:
             tc.get("expected", "") or "",
             tc.get("result", "") or "",
             tc.get("jira_ticket", "") or "",
+            tc.get("note", "") or "",
         ]
         for j, val in enumerate(values):
             cell = ws.cell(row=row, column=HEADER_START_COL + j, value=val)

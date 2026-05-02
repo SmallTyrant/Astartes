@@ -19,7 +19,7 @@ description: (내부 참조 전용) XLSX export 골자·step 분해·수식 사�
 이 다섯은 절대 깨면 안 된다. 깨졌다면 export 스크립트나 TC JSON을 고친다.
 
 1. **앱당 1 워크북**. `outputs/sheets/{appname}.xlsx` 단일 파일에 summury 시트 + (screen, platform) 탭들이 모두 들어간다. 화면별 CSV 분리 금지.
-2. **레이아웃**: 컬럼 A 비움 / Row 1 비움 / Row 2 헤더 (B~L) / Row 3+ 데이터. 헤더는 연두(#B6D7A8), 가운데 정렬, 굵게.
+2. **레이아웃**: 컬럼 A 비움 / Row 1 비움 / Row 2 헤더 (B~M) / Row 3+ 데이터. 헤더는 연두(#B6D7A8), 가운데 정렬, 굵게.
 3. **priority 조건부 서식**: high=빨강(#E06666, 흰 글씨 굵게), mid=노랑(#FFD966), low=초록(#93C47D). C{데이터행} 범위에만 적용.
 4. **result 컬럼 (K)**: 드롭다운 옵션은 `Pass / Fail / Block / N/A`. **기본값은 빈 칸** (QA가 실행 후 채움). 드롭다운 적용 범위는 실제 TC 행만(`K3:K{last_row}`) — 빈 행에 칩셋이 노출되면 안 된다.
 5. **summury 통계는 수식**: 직접 입력 금지. 모든 카운트는 `=COUNTA('탭'!B3:B{N})`, `=COUNTIF('탭'!K3:K{N},"Pass")` 같이 **명시적 마지막 행 번호**를 쓴다. open-ended (`K3:K`)는 COUNTIF에서 `#NAME?`을 일으키므로 절대 금지.
@@ -87,7 +87,7 @@ description: (내부 참조 전용) XLSX export 골자·step 분해·수식 사�
 - 한 step에 여러 버튼·동작 묶기 (예: "탭하고 입력하고 생성한다").
 - summury 통계 셀에 숫자 직접 입력 — 반드시 수식.
 - 화면별로 CSV/XLSX를 따로 만들기 — 앱당 1 파일.
-- TC 시트 헤더 위치/문구 변경 — `TC ID, priority, 1 Step ~ 5 Step, pre-condition, 기대결과, result, Jira ticket`로 고정.
+- TC 시트 헤더 위치/문구 변경 — `TC ID, priority, 1 Step ~ 5 Step, pre-condition, 기대결과, result, Jira ticket, 비고`로 고정.
 
 ## 참고 문서
 
