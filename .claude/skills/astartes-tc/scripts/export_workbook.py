@@ -228,8 +228,8 @@ def group_by_tab(tcs: list[dict]) -> dict[tuple[str, str], list[dict]]:
             continue
         groups.setdefault((screen, platform), []).append(tc)
     for lst in groups.values():
-        # str 캐스트로 int/str 혼재 시 TypeError 방지
-        lst.sort(key=lambda t: str(t.get("tc_id") or ""))
+        # tc_id 없는 시드/메모 행은 맨 뒤로 보낸다 (정렬 안정성 + str 캐스트로 int/str 혼재 시 TypeError 방지)
+        lst.sort(key=lambda t: (t.get("tc_id") in (None, ""), str(t.get("tc_id") or "")))
     return groups
 
 
@@ -257,13 +257,24 @@ def add_tc_sheet(wb: Workbook, sheet_name: str, tcs: list[dict]) -> None:
         cell.alignment = CENTER
         cell.border = BORDER
 
+    prev_steps: list[str] | None = None
     for idx, tc in enumerate(tcs):
         row = DATA_START_ROW + idx
         steps = steps_to_cells(tc.get("steps") or [])
+        # 시각적 공백: 직전 행의 같은 컬럼과 동일하면 빈 칸으로 둔다 (PDF뷰어_and 패턴).
+        # 상태 변경 단계만 노출되어 시트가 step-progression처럼 읽힌다.
+        display_steps = list(steps)
+        if prev_steps is not None:
+            for j in range(5):
+                if display_steps[j] and display_steps[j] == prev_steps[j]:
+                    display_steps[j] = ""
+        prev_steps = steps
+        # tc_id가 None이면 빈 칸 유지 (시드/메모 행). priority도 동일.
+        tc_id_val = tc.get("tc_id")
         values = [
-            tc.get("tc_id", idx + 1),
-            tc.get("priority", ""),
-            steps[0], steps[1], steps[2], steps[3], steps[4],
+            tc_id_val if tc_id_val not in (None, "") else None,
+            tc.get("priority") or None,
+            display_steps[0], display_steps[1], display_steps[2], display_steps[3], display_steps[4],
             tc.get("precondition", "") or "",
             tc.get("expected", "") or "",
             tc.get("result", "") or "",
