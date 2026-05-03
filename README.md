@@ -152,7 +152,17 @@ GoodNotes App Store 명세를 입력으로 `/astartes-tc` 한 줄 실행 시 생
 
 ## 명세가 바뀌었을 때
 
-명세서가 변경되어 TC를 다시 생성하면, 기존 수행 결과(result)를 **자동으로 보존**합니다.
+### 어떻게 다시 만들지 — 3가지 시나리오
+
+| 상황 | 명령 |
+|---|---|
+| **소스(Figma/PDF/...)가 바뀜** — 전체 다시 생성 | `/astartes-tc https://figma.com/file/ABC... --spec-version v1.2` |
+| **JSON만 직접 수정** — 시트만 다시 굽기 (가장 빠름) | `/astartes-tc --export-only --spec-version v1.2` |
+| **`inputs/` 폴더에 새 파일 드롭** | `/astartes-tc --spec-version v1.2` (인자 없음 → 로컬 스캔) |
+
+`--spec-version`은 선택 — 없으면 비고에 날짜만 기록됩니다.
+
+### result 보존 규칙
 
 | 케이스 | result |
 |---|---|
@@ -162,7 +172,7 @@ GoodNotes App Store 명세를 입력으로 `/astartes-tc` 한 줄 실행 시 생
 | 삭제된 TC | 행 유지 + result `N/A` + 비고에 `"명세 변경으로 삭제됨"` 기록 |
 
 > 내용 변경 판정: `steps`, `expected`, `precondition`, `priority`, `risk_tags`, `title` 중 하나라도 다르면 초기화.  
-> 해시 사이드카: `outputs/sheets/{appname}_snapshot.json`에 자동 저장.
+> 해시 사이드카: `outputs/sheets/{appname}_snapshot.json`에 자동 저장. **이 파일을 지우면 result 보존이 끊깁니다 — git 추적 권장.**
 
 **삭제된 TC 비고 형식** (M열):
 
