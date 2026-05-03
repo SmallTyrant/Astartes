@@ -152,13 +152,13 @@
     }
   },
   "7.0": {
-    "content_hash": "55f661019149acb9c0bdfed86cf8434b7af734206230518016526c8a267ac5e3",
+    "content_hash": "2d6a68fb2bf1ec406a9dcbb9796ae56d1e81ef604ee97e42573b79a3a03eca6f",
     "result": "",
     "tc_data": {
       "tc_id": 7.0,
       "screen": "PDF뷰어",
       "platform": "ios",
-      "priority": "low",
+      "priority": "high",
       "precondition": "iCloud 로그인 완료, PDF 파일 열린 상태",
       "steps": [
         "",
@@ -170,7 +170,9 @@
       "note": "",
       "requirement_id": "",
       "source_refs": [],
-      "risk_tags": [],
+      "risk_tags": [
+        "network"
+      ],
       "negative": false,
       "needs_review": false
     }
